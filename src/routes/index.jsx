@@ -6,6 +6,7 @@ import Home from '../pages/Home';
 import ProductsList from '../pages/ProductsList';
 import ProductDetail from '../pages/ProductDetail';
 import AdminProducts from '../pages/AdminProducts';
+import AdminOrders from '../pages/AdminOrders';
 import Cart from '../pages/Cart';
 import Form from '../pages/Form';
 import Login from '../pages/Login';
@@ -31,6 +32,8 @@ const routes = [
             { index: true, element: <AdminHome /> },
             { path: 'products', element: <Navigate to="/admin/products/1" replace /> },  // 預設跳轉
             { path: 'products/:page', element: <AdminProducts /> },
+            { path: 'orders', element: <Navigate to="/admin/orders/1" replace /> },  // 預設跳轉
+            { path: 'orders/:page', element: <AdminOrders /> },
         ]
     },
     {

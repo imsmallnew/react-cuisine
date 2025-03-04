@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState} from 'react';
+import { useState } from 'react';
 import { useDispatch } from "react-redux"
 import axios from 'axios';
 import { pushMessage } from '../redux/toastSlice';
@@ -8,7 +8,7 @@ import { showLoading, hideLoading } from "../redux/loadingSlice";
 export default function LogoutBtn() {
     const API_URL = import.meta.env.VITE_BASE_URL;
     const AUTHOR = import.meta.env.VITE_API_PATH;
-    
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [account, setAccount] = useState({
@@ -43,7 +43,7 @@ export default function LogoutBtn() {
 
     return (
         <>
-            <div className="nav float-end">
+            <div className="nav-item">
                 <button className="btn btn-sm btn-outline-secondary" type="button" id="logoutBtn" onClick={handleLogout}>登出後台</button>
             </div>
         </>

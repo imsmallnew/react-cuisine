@@ -34,6 +34,11 @@ export default function ProductsList() {
       setClientProductList(data);
     } catch (error) {
       console.error(error)
+      dispatch(pushMessage({
+        title: "取得商品列表失敗",
+        text: error?.message,
+        status: "failed"
+      }))
     } finally {
       dispatch(hideLoading());
     }
@@ -100,22 +105,8 @@ export default function ProductsList() {
         <div className="row">
           {/* 左側固定分類欄 */}
 
-          <div
-            className="col-2 d-none d-md-block"
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              height: "100vh",
-              overflowY: "auto",
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-              color: "#fff",
-              padding: "40px",
-              paddingTop: "50px",
-              zIndex: 10,
-            }}
-          >
-            <ul className="list-group list-group-flush mt-5 text-center">
+          <div className="d-flex flex-md-column flex-row col-12 col-md-2 d-md-block category-list">
+            <ul className="list-group list-group-horizontal-md list-group-flush flex-md-column flex-row w-100 text-center">
               {/* 全部商品按鈕 */}
               <motion.li
                 className={`list-group-item ${selectedCategory === null ? "active bg-warning text-dark" : ""}`}
@@ -156,7 +147,7 @@ export default function ProductsList() {
           </div>
 
           {/* 右側商品列表 */}
-          <div className="col-12 col-md-10 offset-md-2 ps-4 pe-4" style={{ zIndex: 10 }}>
+          <div className="col-12 col-md-10 offset-md-2 ps-4 pe-4 mt-md-0 mt-5 pt-3" style={{ zIndex: 10 }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedCategory} // 每次分類變更，觸發動畫
@@ -167,7 +158,7 @@ export default function ProductsList() {
                 className="row mt-4"
               >
                 {filteredProducts?.map((item) => (
-                  <div key={item.id} className="col-md-4 mb-4">
+                  <div key={item.id} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-3">
                     <motion.div
                       className="card h-100"
                       whileHover={{ scale: 1.02 }}

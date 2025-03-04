@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const [isVisible, setIsVisible] = useState(false);
@@ -83,7 +83,7 @@ export default function Home() {
                         className="display-3 fw-bold text-shadow"
                         style={{ opacity: textOpacity, transform: `translateY(${textY}px)` }}
                     >
-                        Daniel American Restaurent
+                        Daniel's Burger
                     </motion.h1>
 
                     <motion.p
@@ -101,12 +101,12 @@ export default function Home() {
                             whileInView={{ y: 0, opacity: 1 }} // 滾動到視圖中時，移動到正常位置並顯示
                             transition={{ duration: 0.8 }} // 動畫持續時間
                         >
-                            <NavLink
+                            <Link
                                 to={"products"}
                                 className="arrow-btn text-shadow"
                             >
                                 開始點餐 <i className="fa fa-cutlery"></i>
-                            </NavLink>
+                            </Link>
                         </motion.div>
 
                         <motion.div
@@ -160,7 +160,7 @@ export default function Home() {
                         >
                             {event.map((item, index) => (
                                 <motion.div
-                                    className="card shadow p-3 mb-5 bg-body rounded col-12 col-md-3"
+                                    className="card shadow p-3 mb-5 bg-body rounded col-12 col-sm-6 col-md-6 col-lg-3 mx-2"
                                     key={index}
                                     initial={{ y: -50, opacity: 0 }} // 每個卡片從上方進入並逐漸變得可見
                                     whileInView={{ y: 0, opacity: 1 }} // 滾動到視圖時卡片顯示

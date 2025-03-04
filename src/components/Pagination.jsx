@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 
 export default function Pagination({
     pageInfo,
@@ -28,4 +29,15 @@ export default function Pagination({
             </nav>
         </div>
     )
+}
+
+// 定義PropTypes
+Pagination.propTypes = {
+    pageInfo: PropTypes.shape({
+        has_pre: PropTypes.bool,
+        has_next: PropTypes.bool,
+        current_page: PropTypes.number,
+        total_pages: PropTypes.number,
+    }),
+    handlePageChange: PropTypes.func.isRequired,
 }

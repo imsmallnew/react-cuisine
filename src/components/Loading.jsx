@@ -1,6 +1,7 @@
 import ReactLoading from 'react-loading';
+import PropTypes from 'prop-types';
 
-function Loading({
+export default function Loading({
     loadingText
 }) {
     return (
@@ -20,4 +21,7 @@ function Loading({
     )
 }
 
-export default Loading
+// 定義PropTypes
+Loading.prototype = {
+    loadingText: PropTypes.string,
+}

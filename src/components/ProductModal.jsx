@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function ProductModal({
     productModalRef,
     target,
@@ -15,7 +17,7 @@ export default function ProductModal({
 }) {
     return (
         <div id="productModal" ref={productModalRef} className="modal" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <div className="modal-dialog modal-dialog-centered modal-xl">
+            <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: "980px" }}>
                 <div className="modal-content border-0 shadow">
                     <div className={`modal-header border-bottom ${target === "create" ? "bg-success" : "bg-primary"}`}>
                         <h5 className="modal-title fs-4 text-white">{target === "create" ? "新增商品" : "編輯商品"}</h5>
@@ -311,4 +313,32 @@ export default function ProductModal({
             </div>
         </div>
     )
+}
+
+// 定義PropTypes
+ProductModal.propTypes = {
+    productModalRef: PropTypes.shape({ current: PropTypes.any }),
+    target: PropTypes.oneOf(["create", "edit"]),
+    tempProduct: PropTypes.shape({
+        title: PropTypes.string,
+        category: PropTypes.string,
+        unit: PropTypes.string,
+        origin_price: PropTypes.number,
+        price: PropTypes.number,
+        description: PropTypes.string,
+        content: PropTypes.string,
+        is_enabled: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+        imageUrl: PropTypes.string,
+        imagesUrl: PropTypes.arrayOf(PropTypes.string)
+    }).isRequired,
+    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    units: PropTypes.arrayOf(PropTypes.string).isRequired,
+    handleInputChange: PropTypes.func,
+    handleFileChange: PropTypes.func,
+    handleImageChange: PropTypes.func,
+    imagesUrlRemove: PropTypes.func,
+    badgeReplace: PropTypes.func,
+    imagesUrlAdd: PropTypes.func,
+    closeProductModal: PropTypes.func,
+    handleModalUpdate: PropTypes.func,
 }

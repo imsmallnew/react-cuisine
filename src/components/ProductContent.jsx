@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function ProductContent({
     tempProduct,
     tempImgUrl,
@@ -7,7 +9,7 @@ export default function ProductContent({
         <>
             <kbd>商品內容</kbd>
             {tempProduct.title ? (
-                <div className="card mt-3">
+                <div className="card mt-4">
                     <div className="row">
                         {tempImgUrl ? <div className="col-md-12">
                             <div className="mainWrap">
@@ -54,4 +56,21 @@ export default function ProductContent({
             )}
         </>
     )
+}
+
+// 定義PropTypes
+ProductContent.propTypes = {
+    tempProduct: PropTypes.shape({
+        title: PropTypes.string,
+        category: PropTypes.string,
+        origin_price: PropTypes.number,
+        price: PropTypes.number,
+        description: PropTypes.string,
+        content: PropTypes.string,
+        is_enabled: PropTypes.number,
+        imageUrl: PropTypes.string,
+        imagesUrl: PropTypes.arrayOf(PropTypes.string)
+    }),
+    tempImgUrl: PropTypes.string,
+    setTempImgUrl: PropTypes.func.isRequired,
 }

@@ -36,7 +36,7 @@ export default function Login() {
 
             dispatch(pushMessage({
                 title: "系統提示",
-                text: "驗證登入成功, 歡迎商品進入管理後台",
+                text: "驗證登入成功, 歡迎進入商品管理後台",
                 status: "success"
             }))
             navigate("/admin");
@@ -59,12 +59,17 @@ export default function Login() {
             const res = await axios.post(`${API_URL}/v2/api/user/check`)
             dispatch(pushMessage({
                 title: "系統提示",
-                text: "驗證登入成功, 歡迎商品進入管理後台",
+                text: "驗證登入成功, 歡迎進入商品管理後台",
                 status: "success"
             }))
             navigate("/admin");
         } catch (error) {
             console.error(error)
+            dispatch(pushMessage({
+                title: "系統提示",
+                text: error?.response?.data?.message || error?.message,
+                status: "failed"
+            }))
         } finally {
             dispatch(hideLoading());
         }
@@ -101,7 +106,9 @@ export default function Login() {
             {/* 導覽列 */}
             <nav className="navbar navbar-light navbar-expand text-primary navbar-toggleable fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
-                    <a className="navbar-brand">React W7</a>
+                    <a className="navbar-brand site-title">
+                        <img src='https://storage.googleapis.com/vue-course-api.appspot.com/imsmallnew/1740577531932.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=hacFYUa9Ch66uvhPKL0%2FmE5%2BmOwT4bwuA6gRYAxMZCXJE3p9Yvq9CjWXXfLZ0MRO%2FIOur7bocEHtSYJtQRu76ou1n3WPXja1T2Dw89JmiRAqcWye7wTvenzth%2FTL5KX2%2FtfrPDJRQD1B0SDJA8%2Fq5uTs7IjplfCX2JyTipZ4gKs3JcfuhEKhA0CzxTmHd3U%2BGun8TCBiokVdkY%2BulezROsPDKxy9xMrxYi39JXS%2B1xS3XhXim7t7VOxY1ncZ9zL3VuBb8y2TuiI5Dc0Sr8DOa2uGZVQ9uQlawag0PtgjbtD6%2FifZcKxCDbTnEM57vR9zEUf9ud%2FlhrwOIWAnl9XGDQ%3D%3D' style={{ width: 50, marginRight: '5px' }} /> Daniel's Burger Admin
+                    </a>
                     <div className="d-flex">
                         <NavLink
                             to={"/"}
@@ -131,7 +138,7 @@ export default function Login() {
                             </div>
                             <button className="btn btn-primary">登入</button>
                         </form>
-                        <p className="mt-5 mb-3 text-muted">&copy; 2024~∞ - 六角學院</p>
+                        <p className="mt-5 mb-3 text-muted">&copy; 2024 - Daniel's Burger All Rights Reserved.</p>
                     </div>
                 </div>
             </div>

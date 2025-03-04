@@ -97,16 +97,16 @@ export default function Cart() {
     dispatch(showLoading("更新購物車中..."));
 
     try {
-      const res = await axios.put(`${API_URL}/v2/api/${AUTHOR}/cart/${cartItem.id}`, {
+      const res = await axios.put(`${API_URL}/v2/api/${AUTHOR}/cart/${cartItem?.id}`, {
         data: {
-          product_id: cartItem.product.id,
+          product_id: cartItem?.product?.id,
           qty: Number(qty)
         }
       })
       dispatch(getCartList())
       dispatch(pushMessage({
         title: "更新成功",
-        text: `[${cartItem.product.title}] 數量已更新為 ${res.data?.data?.qty} ${cartItem.product.unit}`,
+        text: `[${cartItem?.product?.title}] 數量已更新為 ${res.data?.data?.qty} ${cartItem?.product?.unit}`,
         status: "success"
       }))
     } catch (error) {
@@ -131,7 +131,7 @@ export default function Cart() {
       dispatch(getCartList())
       dispatch(pushMessage({
         title: "刪除成功",
-        text: `[${cartItem.product?.title}] 已從購物車移除`,
+        text: `[${cartItem?.product?.title}] 已從購物車移除`,
         status: "success"
       }))
     } catch (error) {
@@ -200,6 +200,9 @@ export default function Cart() {
         <div className="container position-relative pb-5" style={{ zIndex: 2 }}>
           <div className="mt-4">
             <div className="table-responsive">
+              {cartList?.carts?.length === 0 && <div className="text-center">
+                <span className="badge bg-warning p-2 pe-3 ps-3 text-dark fs-6 mt-2 lh-base">[溫馨提示]: 購物車目前為空！<br className='mobileValue'/>請至 <Link className='text-danger text-decoration-none' to={'/products'}>商品列表</Link> 挑選你想吃的唷 ( *´ސު｀*)</span>
+              </div>}
               <table className="table mt-3 table-hover text-dark bg-light rounded-3 overflow-hidden shadow-sm">
                 <thead className="table-warning text-dark">
                   <tr className="text-center">
@@ -214,7 +217,7 @@ export default function Cart() {
                 </thead>
                 <tbody>
                   {cartList?.carts?.map((cartItem) => (
-                    <tr key={cartItem.id} className="align-middle text-center">
+                    <tr key={cartItem?.id} className="align-middle text-center">
                       <td className="text-start">
                         <img
                           src={cartItem?.product?.imageUrl}
@@ -223,15 +226,15 @@ export default function Cart() {
                           width="100"
                         />
                       </td>
-                      <td className="text-center"><h5>{cartItem.product.title}</h5></td>
-                      <td><span className="badge bg-danger">{cartItem.product.category}</span></td>
+                      <td className="text-center"><h5>{cartItem?.product?.title}</h5></td>
+                      <td><span className="badge bg-danger">{cartItem?.product?.category}</span></td>
                       <td>
                         <div className="btn-group" role="group">
                           <button
                             type="button"
-                            disabled={cartItem.qty === 1 || isLoading}
+                            disabled={cartItem?.qty === 1 || isLoading}
                             className="btn btn-outline-dark btn-sm"
-                            onClick={() => updateCartItem(cartItem, cartItem.qty - 1)}
+                            onClick={() => updateCartItem(cartItem, cartItem?.qty - 1)}
                           >-</button>
                           <span className="btn border border-secondary bg-white text-dark" style={{ width: "50px", cursor: "auto" }}>
                             {cartItem.qty}
@@ -240,12 +243,12 @@ export default function Cart() {
                             type="button"
                             disabled={isLoading}
                             className="btn btn-outline-dark btn-sm"
-                            onClick={() => updateCartItem(cartItem, cartItem.qty + 1)}
+                            onClick={() => updateCartItem(cartItem, cartItem?.qty + 1)}
                           >+</button>
                         </div>
                       </td>
-                      <td className="text-dark fw-bold">{cartItem.product.price} 元</td>
-                      <td className="text-dark fw-bold">{cartItem.total} 元</td>
+                      <td className="text-dark fw-bold">{cartItem?.product?.price} 元</td>
+                      <td className="text-dark fw-bold">{cartItem?.total} 元</td>
                       <td>
                         <button type="button" className="btn btn-danger btn-sm" onClick={() => openDeleteModal(cartItem)}>
                           <i className="fas fa-trash-alt"></i>
@@ -257,11 +260,11 @@ export default function Cart() {
                 <tfoot>
                   <tr>
                     <td colSpan="6" className="text-end fs-5">總計</td>
-                    <td className="text-end text-danger fs-4 fw-bold pe-5">{cartList.total} 元</td>
+                    <td className="text-end text-danger fs-4 fw-bold pe-5">{cartList?.total} 元</td>
                   </tr>
                   <tr>
                     <td colSpan="6" className="text-end fs-5">折扣價</td>
-                    <td className="text-end text-success fs-4 fw-bold pe-5">{cartList.final_total} 元</td>
+                    <td className="text-end text-success fs-4 fw-bold pe-5">{cartList?.final_total} 元</td>
                   </tr>
                 </tfoot>
               </table>
@@ -269,13 +272,13 @@ export default function Cart() {
 
             {/* 按鈕區塊 */}
             <div className="text-end mt-2">
-              <Link className="btn btn-dark me-2 btn-lg px-4 py-2" to={'/products'}>繼續購物</Link>
+              <Link className="btn btn-dark me-2 px-4 py-2" to={'/products'}>繼續購物</Link>
               {cartList?.carts?.length !== 0 && (
-                <button className="btn btn-danger me-2 btn-lg px-4 py-2" type="button" onClick={() => openDeleteModal({})}>
+                <button className="btn btn-danger me-2 px-4 py-2" type="button" onClick={() => openDeleteModal({})}>
                   清空購物車
                 </button>
               )}
-              <Link className="btn btn-dark btn-lg px-4 py-2" to={'/form'}>結帳表單</Link>
+              {cartList?.carts?.length !== 0 && <Link className="btn btn-dark px-4 py-2" to={'/form'}>結帳表單</Link>}
             </div>
           </div>
         </div>

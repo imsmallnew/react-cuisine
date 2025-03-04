@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function DeleteModal({
     deleteModalRef,
     tempProduct,
@@ -49,4 +51,24 @@ export default function DeleteModal({
             </div>
         </div>
     )
+}
+
+// 定義PropTypes
+DeleteModal.propTypes = {
+    deleteModalRef: PropTypes.shape({ current: PropTypes.any }),
+    tempProduct: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        title: PropTypes.string,
+    }).isRequired,
+    navigation: PropTypes.string,
+    cartItem: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        product: PropTypes.shape({
+            title: PropTypes.string,
+        })
+    }).isRequired,
+    deleteProduct: PropTypes.func,
+    closeDeleteModal: PropTypes.func,
+    removeCartItem: PropTypes.func,
+    removeAllCart: PropTypes.func,
 }

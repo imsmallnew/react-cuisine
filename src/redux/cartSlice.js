@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { showLoading, hideLoading } from "./loadingSlice";
+import { pushMessage } from "./toastSlice";
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 const AUTHOR = import.meta.env.VITE_API_PATH;
@@ -13,14 +14,13 @@ export const getCartList = createAsyncThunk(
             const res = await axios.get(`${API_URL}/v2/api/${AUTHOR}/cart`) 
             return res?.data?.data;
         } catch (error) {
-            dispatch(
-                pushMessage({
-                  title: "錯誤",
-                  text: error.response?.data?.message || "取得購物車清單失敗",
-                  status: "failed",
-                })
-              );
-            return rejectWithValue(error?.response?.data?.message || "取得購物車清單失敗")
+            console.error(error)
+            dispatch(pushMessage({
+                title: "取得購物車清單失敗",
+                text: error?.response?.data?.message || error?.message,
+                status: "failed"
+            }))
+            return rejectWithValue(error?.response?.data?.message || error?.message || "取得購物車清單失敗")
         } finally {
             dispatch(hideLoading())
         }

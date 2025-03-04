@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function ClientProductModal({
     clientProductModalRef,
     tempImgUrl,
@@ -86,4 +88,27 @@ export default function ClientProductModal({
             </div>
         </>
     )
+}
+
+// 定義PropTypes
+ClientProductModal.propTypes = {
+    clientProductModalRef: PropTypes.shape({ current: PropTypes.any }),
+    tempImgUrl: PropTypes.string,
+    tempProduct: PropTypes.shape({
+        title: PropTypes.string,
+        category: PropTypes.string,
+        unit: PropTypes.string,
+        origin_price: PropTypes.number,
+        price: PropTypes.number,
+        description: PropTypes.string,
+        content: PropTypes.string,
+        is_enabled: PropTypes.number,
+        imageUrl: PropTypes.string,
+        imagesUrl: PropTypes.arrayOf(PropTypes.string)
+    }),
+    orderQty: PropTypes.number.isRequired,
+    setOrderQty: PropTypes.func.isRequired,
+    setTempImgUrl: PropTypes.func.isRequired,
+    closeClientProductModal: PropTypes.func.isRequired,
+    addCartItem: PropTypes.func.isRequired,
 }

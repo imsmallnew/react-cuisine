@@ -1,5 +1,6 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReactLoading from 'react-loading';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { pushMessage } from '../redux/toastSlice';
@@ -12,6 +13,7 @@ export default function AdminHome() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [orders, setOrders] = useState([]);
+    const [calculate, setCalculate] = useState(true);
     const [topSalesByQuantity, setTopSalesByQuantity] = useState([]);
     const [topSalesByAmount, setTopSalesByAmount] = useState([]);
     const [totalRevenue, setTotalRevenue] = useState(0);
@@ -23,11 +25,10 @@ export default function AdminHome() {
 
         try {
             const res = await axios.post(`${API_URL}/v2/api/user/check`)
+            fetchAllOrders();
         } catch (error) {
             alert(error?.response?.data?.message)
             navigate("/login")
-        } finally {
-            dispatch(hideLoading());
         }
     }
 
@@ -40,12 +41,14 @@ export default function AdminHome() {
             axios.defaults.headers.common['Authorization'] = token;
             checkUserLogin()
         } else {
+            dispatch(hideLoading())
             navigate("/login")
         }
     }, [])
 
     // 獲取所有頁數的訂單資料
     const fetchAllOrders = async () => {
+        // dispatch(showLoading("讀取中..."));
         try {
             const firstResponse = await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders`);
             const { total_pages } = firstResponse.data.pagination;
@@ -70,9 +73,11 @@ export default function AdminHome() {
             console.error(error);
             dispatch(pushMessage({
                 title: "獲取訂單失敗",
-                text: error?.response?.data?.message|| `請稍後再試`,
+                text: error?.response?.data?.message || `請稍後再試`,
                 status: "failed"
             }))
+        } finally {
+            dispatch(hideLoading());
         }
     };
 
@@ -110,6 +115,7 @@ export default function AdminHome() {
         setTopSalesByQuantity(sortedByQuantity);
         setTopSalesByAmount(sortedByAmount);
         setTotalRevenue(totalRevenue);
+        setCalculate(false);
     };
 
     // 計算訂單狀態
@@ -141,10 +147,6 @@ export default function AdminHome() {
         setOrderStatus(statusList);
     };
 
-    useEffect(() => {
-        fetchAllOrders();
-    }, []);
-
     return (
         <>
             <div
@@ -158,8 +160,8 @@ export default function AdminHome() {
                 }}
             />
 
-            <div className="container mt-5">
-                <div className="main text-white mb-5">
+            <div className="container mt-5 pt-2">
+                <div className="main text-white mb-5 text-center">
                     <h1>歡迎來到商品管理後台！</h1>
                     <p>*** 這裡會放 Dashboard 來顯示客戶的購物紀錄 ***</p>
                 </div>
@@ -170,7 +172,8 @@ export default function AdminHome() {
                         <div className="card p-3 shadow h-100 d-flex flex-column card-bg">
                             <h4>💰 訂單總收入</h4>
                             <div className="d-flex justify-content-center align-items-center flex-grow-1">
-                                <p className="fs-1 text-success text-center">${totalRevenue.toLocaleString()}</p>
+                                {calculate ? <ReactLoading type="spin" color="#000000" height="2rem" width="2rem" className="d-flex text-success" />
+                                    : <p className="fs-1 text-success text-center">${totalRevenue.toLocaleString()}</p>}
                             </div>
                         </div>
                     </div>
@@ -179,23 +182,25 @@ export default function AdminHome() {
                     <div className="col-md-6 mb-4">
                         <div className="card p-3 shadow h-100 d-flex flex-column card-bg">
                             <h4>📊 訂單狀態</h4>
-                            <ul className="flex-grow-1 d-flex flex-column justify-content-center">
-                                {orderStatus.map((item, index) => (
-                                    <li key={index}>{item.title} {item.value}</li>
-                                ))}
-                            </ul>
+                            {calculate ? <div className="d-flex justify-content-center align-items-center flex-grow-1"><ReactLoading type="spin" color="#000000" height="2rem" width="2rem" className="d-flex text-success" /></div>
+                                : <ul className="flex-grow-1 d-flex flex-column justify-content-center">
+                                    {orderStatus.map((item, index) => (
+                                        <li key={index}>{item.title} {item.value}</li>
+                                    ))}
+                                </ul>}
                         </div>
                     </div>
 
                     {/* Top 3 銷售數量 */}
                     <div className="col-md-6 mb-4">
-                        <div className="card p-3 shadow  d-flex flex-column card-bg">
+                        <div className="card p-3 shadow d-flex flex-column card-bg">
                             <h4>🔥 銷售數量 Top 3</h4>
-                            <ul className="flex-grow-1 d-flex flex-column justify-content-center">
-                                {topSalesByQuantity.map((item, index) => (
-                                    <li key={index}>{index + 1}. {item.title} - {item.totalNum} 件</li>
-                                ))}
-                            </ul>
+                            {calculate ? <div className="d-flex justify-content-center align-items-center flex-grow-1"><ReactLoading type="spin" color="#000000" height="2rem" width="2rem" className="d-flex text-success" /></div>
+                                : <ul className="flex-grow-1 d-flex flex-column justify-content-center">
+                                    {topSalesByQuantity.map((item, index) => (
+                                        <li key={index}>{index + 1}. {item.title} - {item.totalNum} 件</li>
+                                    ))}
+                                </ul>}
                         </div>
                     </div>
 
@@ -203,11 +208,12 @@ export default function AdminHome() {
                     <div className="col-md-6">
                         <div className="card p-3 shadow  d-flex flex-column card-bg">
                             <h4>💵 銷售金額 Top 3</h4>
-                            <ul className="flex-grow-1 d-flex flex-column justify-content-center">
-                                {topSalesByAmount.map((item, index) => (
-                                    <li key={index}>{index + 1}. {item.title} - ${item.totalAmount.toLocaleString()}</li>
-                                ))}
-                            </ul>
+                            {calculate ? <div className="d-flex justify-content-center align-items-center flex-grow-1"><ReactLoading type="spin" color="#000000" height="2rem" width="2rem" className="d-flex text-success" /></div>
+                                : <ul className="flex-grow-1 d-flex flex-column justify-content-center">
+                                    {topSalesByAmount.map((item, index) => (
+                                        <li key={index}>{index + 1}. {item.title} - ${item.totalAmount.toLocaleString()}</li>
+                                    ))}
+                                </ul>}
                         </div>
                     </div>
                 </div>

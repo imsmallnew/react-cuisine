@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function ProductMenu({
     state,
     productList,
@@ -71,4 +73,27 @@ export default function ProductMenu({
             </table>
         </>
     )
+}
+
+// 定義PropTypes
+ProductMenu.proptypes = {
+    state: PropTypes.bool,
+    productList: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        title: PropTypes.string,
+        category: PropTypes.string,
+        origin_price: PropTypes.number,
+        price: PropTypes.number,
+        is_enabled: PropTypes.number,
+        imageUrl: PropTypes.string,
+    }),
+    tempProduct: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
+    openProductModal: PropTypes.func,
+    openDeleteModal: PropTypes.func,
+    handleChangeOption: PropTypes.func,
+    setTempProduct: PropTypes.func,
+    setTempImgUrl: PropTypes.func,
+    setState: PropTypes.func,
 }

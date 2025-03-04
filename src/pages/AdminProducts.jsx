@@ -22,8 +22,8 @@ export default function AdminProducts() {
     title: "",
     category: "",
     unit: "",
-    origin_price: "",
-    price: "",
+    origin_price: 0,
+    price: 0,
     description: "",
     content: "",
     is_enabled: 0,
@@ -98,7 +98,7 @@ export default function AdminProducts() {
     navigate(`/admin/products/${newPage}`, { replace: true });
   };
 
-  // 取得商品資料
+  // 取得特定頁面商品資料
   const getProducts = async (page) => {
     dispatch(showLoading("讀取中..."));
 
@@ -107,14 +107,11 @@ export default function AdminProducts() {
         .then((res) => {
           // 因API建立商品是最先建的num數字在後面,可重新排序顯示.sort((a, b) => b.num - a.num)
           let data = res.data.products;
-          let categoriesData = [...new Set(data.map(item => item.category))];
-          let unitsData = [...new Set(data.map(item => item.unit))];
           setProductList(data) // 商品資料
+          getAllProducts();
           data?.length > 0 && setTempProduct(data[0]) // 預設商品檢視
           data?.length > 0 && setTempImgUrl(data[0].imageUrl) // 預設商品檢視圖
           setPageInfo(res.data.pagination) // 頁碼
-          setCategories(categoriesData) // ProductModal中的已選分類清單
-          setUnits(unitsData) // ProductModal中的已選單位清單
         })
     } catch (error) {
       console.error(error)
@@ -125,6 +122,22 @@ export default function AdminProducts() {
       }))
     } finally {
       dispatch(hideLoading());
+    }
+  }
+
+  // 獲取所有不分頁商品
+  const getAllProducts = async () => {
+    try {
+      await axios.get(`${API_URL}/v2/api/${AUTHOR}/products/all`)
+        .then((res) => {
+          let data = res.data.products;
+          let categoriesData = [...new Set(data.map(item => item.category))];
+          let unitsData = [...new Set(data.map(item => item.unit))];
+          setCategories(categoriesData) // ProductModal中的已選分類清單
+          setUnits(unitsData) // ProductModal中的已選單位清單
+        })
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -433,7 +446,7 @@ export default function AdminProducts() {
       <div className="container main">
         <div className="container">
           <div className="row">
-            <div className="col-md-9 mt-4 mb-5">
+            <div className="col-md-9 mt-3 mb-5">
               <ProductMenu
                 state={state}
                 productList={productList}
@@ -450,7 +463,7 @@ export default function AdminProducts() {
                 handlePageChange={handlePageChange}
               />
             </div>
-            <div className="col-md-3 mt-5 mb-5">
+            <div className="col-md-3 mt-4 mb-5">
               <ProductContent
                 tempProduct={tempProduct}
                 tempImgUrl={tempImgUrl}
