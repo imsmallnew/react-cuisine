@@ -1,48 +1,66 @@
 import { Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import Loading from '../components/Loading';
 
-import FrontLayout from '../layouts/FrontLayout';
-import AdminLayout from '../layouts/AdminLayout';
-import Home from '../pages/Home';
-import ProductsList from '../pages/ProductsList';
-import ProductDetail from '../pages/ProductDetail';
-import AdminProducts from '../pages/AdminProducts';
-import AdminOrders from '../pages/AdminOrders';
-import Cart from '../pages/Cart';
-import Form from '../pages/Form';
-import Login from '../pages/Login';
-import NotFound from '../pages/NotFound';
-import AdminHome from '../pages/AdminHome';
+const FrontLayout = lazy(() => import('../layouts/FrontLayout'));
+const AdminLayout = lazy(() => import('../layouts/AdminLayout'));
+const Home = lazy(() => import('../pages/Home'));
+const ProductsList = lazy(() => import('../pages/ProductsList'));
+const ProductDetail = lazy(() => import('../pages/ProductDetail'));
+const AdminProducts = lazy(() => import('../pages/AdminProducts'));
+const AdminOrders = lazy(() => import('../pages/AdminOrders'));
+const Cart = lazy(() => import('../pages/Cart'));
+const Form = lazy(() => import('../pages/Form'));
+const Login = lazy(() => import('../pages/Login'));
+const NotFound = lazy(() => import('../pages/NotFound'));
+const AdminHome = lazy(() => import('../pages/AdminHome'));
 
 const routes = [
     {
         path: '/',
-        element: <FrontLayout />,
+        element: (
+            <Suspense fallback={<Loading />}>
+                <FrontLayout />
+            </Suspense>
+        ),
         children: [
             { index: true, element: <Home /> },
             { path: 'products', element: <ProductsList /> },
             { path: 'products/:id', element: <ProductDetail /> },
             { path: 'cart', element: <Cart /> },
             { path: 'form', element: <Form /> },
-        ]
+        ].map(route => ({ ...route, element: <Suspense fallback={<Loading />}>{route.element}</Suspense> }))
     },
     {
         path: '/admin',
-        element: <AdminLayout />,
+        element: (
+            <Suspense fallback={<Loading />}>
+                <AdminLayout />
+            </Suspense>
+        ),
         children: [
             { index: true, element: <AdminHome /> },
-            { path: 'products', element: <Navigate to="/admin/products/1" replace /> },  // 預設跳轉
+            { path: 'products', element: <Navigate to="/admin/products/1" replace /> },
             { path: 'products/:page', element: <AdminProducts /> },
-            { path: 'orders', element: <Navigate to="/admin/orders/1" replace /> },  // 預設跳轉
+            { path: 'orders', element: <Navigate to="/admin/orders/1" replace /> },
             { path: 'orders/:page', element: <AdminOrders /> },
-        ]
+        ].map(route => ({ ...route, element: <Suspense fallback={<Loading />}>{route.element}</Suspense> }))
     },
     {
         path: '/login',
-        element: <Login />
+        element: (
+            <Suspense fallback={<Loading />}>
+                <Login />
+            </Suspense>
+        )
     },
     {
         path: '*',
-        element: <NotFound />
+        element: (
+            <Suspense fallback={<Loading />}>
+                <NotFound />
+            </Suspense>
+        )
     },
 ];
 
