@@ -26,12 +26,32 @@ export default function AdminOrders() {
   const orderModalRef = useRef(null);
   const orderModalInstanceRef = useRef(null);
 
+  // 取得訂單資料
+  const getOrders = useCallback(async (page) => {
+    dispatch(showLoading("讀取中..."));
+    try {
+      await axios.get(`${API_URL}/v2/api/${AUTHOR}/orders?page=${page}`)
+        .then((res) => {
+          setOrderList(res.data.orders) // 訂單資料
+          setPageInfo(res.data.pagination) // 頁碼
+        })
+    } catch (error) {
+      console.error(error)
+      dispatch(pushMessage({
+        title: "系統提示",
+        text: error?.response?.data?.message || `取得商品資料失敗`,
+        status: "failed"
+      }))
+    } finally {
+      dispatch(hideLoading());
+    }
+  }, [API_URL, AUTHOR, dispatch]);
+
   // 檢查登入狀態
   const checkUserLogin = useCallback(async () => {
     dispatch(showLoading("讀取中..."));
     try {
       await axios.post(`${API_URL}/v2/api/user/check`)
-      getOrders(page)
     } catch (error) {
       dispatch(pushMessage({
         title: "系統提示",
@@ -42,7 +62,7 @@ export default function AdminOrders() {
     } finally {
       dispatch(hideLoading());
     }
-  }, [API_URL, dispatch, getOrders, navigate, page]);
+  }, [API_URL, dispatch, navigate]);
 
   // 若有Cookie則直接驗證, 若失敗則導回login
   useEffect(() => {
@@ -71,30 +91,9 @@ export default function AdminOrders() {
 
   // 點擊頁碼時，更新網址 & page
   const handlePageChange = (newPage) => {
-    setPage(newPage);
+    setPage(newPage); // 先更新 state
     navigate(`/admin/orders/${newPage}`, { replace: true });
   };
-
-  // 取得訂單資料
-  const getOrders = useCallback(async (page) => {
-    dispatch(showLoading("讀取中..."));
-    try {
-      await axios.get(`${API_URL}/v2/api/${AUTHOR}/orders?page=${page}`)
-        .then((res) => {
-          setOrderList(res.data.orders) // 訂單資料
-          setPageInfo(res.data.pagination) // 頁碼
-        })
-    } catch (error) {
-      console.error(error)
-      dispatch(pushMessage({
-        title: "系統提示",
-        text: error?.response?.data?.message || `取得商品資料失敗`,
-        status: "failed"
-      }))
-    } finally {
-      dispatch(hideLoading());
-    }
-  }, [API_URL, AUTHOR, dispatch]);
 
   // 更新付款狀態
   const updatePay = async (product) => {

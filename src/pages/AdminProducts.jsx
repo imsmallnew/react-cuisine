@@ -46,13 +46,55 @@ export default function AdminProducts() {
   const deleteModalRef = useRef(null);
   const deleteModalInstanceRef = useRef(null);
 
+  // 獲取所有不分頁商品
+  const getAllProducts = useCallback(async () => {
+    try {
+      await axios.get(`${API_URL}/v2/api/${AUTHOR}/products/all`)
+        .then((res) => {
+          let data = res.data.products;
+          let categoriesData = [...new Set(data.map(item => item.category))];
+          let unitsData = [...new Set(data.map(item => item.unit))];
+          setCategories(categoriesData) // ProductModal中的已選分類清單
+          setUnits(unitsData) // ProductModal中的已選單位清單
+        })
+    } catch (error) {
+      console.error(error)
+    }
+  }, [API_URL, AUTHOR]);
+
+  // 取得特定頁面商品資料
+  const getProducts = useCallback(async (page) => {
+    dispatch(showLoading("讀取中..."));
+
+    try {
+      await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/products?page=${page}`)
+        .then((res) => {
+          // 因API建立商品是最先建的num數字在後面,可重新排序顯示.sort((a, b) => b.num - a.num)
+          let data = res.data.products;
+          setProductList(data) // 商品資料
+          getAllProducts();
+          data?.length > 0 && setTempProduct(data[0]) // 預設商品檢視
+          data?.length > 0 && setTempImgUrl(data[0].imageUrl) // 預設商品檢視圖
+          setPageInfo(res.data.pagination) // 頁碼
+        })
+    } catch (error) {
+      console.error(error)
+      dispatch(pushMessage({
+        title: "系統提示",
+        text: error?.response?.data?.message || `取得商品資料失敗`,
+        status: "failed"
+      }))
+    } finally {
+      dispatch(hideLoading());
+    }
+  }, [API_URL, AUTHOR, dispatch, getAllProducts]);
+
   // 檢查登入狀態
   const checkUserLogin = useCallback(async () => {
     dispatch(showLoading("讀取中..."));
 
     try {
       await axios.post(`${API_URL}/v2/api/user/check`)
-      getProducts(page)
     } catch (error) {
       dispatch(pushMessage({
         title: "系統提示",
@@ -63,7 +105,7 @@ export default function AdminProducts() {
     } finally {
       dispatch(hideLoading());
     }
-  }, [API_URL, dispatch, getProducts, navigate, page]);
+  }, [API_URL, dispatch, navigate]);
 
   // 若有Cookie則直接驗證, 若失敗則導回login
   useEffect(() => {
@@ -96,49 +138,7 @@ export default function AdminProducts() {
     navigate(`/admin/products/${newPage}`, { replace: true });
   };
 
-  // 取得特定頁面商品資料
-  const getProducts = useCallback(async (page) => {
-    dispatch(showLoading("讀取中..."));
-
-    try {
-      await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/products?page=${page}`)
-        .then((res) => {
-          // 因API建立商品是最先建的num數字在後面,可重新排序顯示.sort((a, b) => b.num - a.num)
-          let data = res.data.products;
-          setProductList(data) // 商品資料
-          getAllProducts();
-          data?.length > 0 && setTempProduct(data[0]) // 預設商品檢視
-          data?.length > 0 && setTempImgUrl(data[0].imageUrl) // 預設商品檢視圖
-          setPageInfo(res.data.pagination) // 頁碼
-        })
-    } catch (error) {
-      console.error(error)
-      dispatch(pushMessage({
-        title: "系統提示",
-        text: error?.response?.data?.message || `取得商品資料失敗`,
-        status: "failed"
-      }))
-    } finally {
-      dispatch(hideLoading());
-    }
-  }, [API_URL, AUTHOR, dispatch, getAllProducts]);
-
-  // 獲取所有不分頁商品
-  const getAllProducts = useCallback(async () => {
-    try {
-      await axios.get(`${API_URL}/v2/api/${AUTHOR}/products/all`)
-        .then((res) => {
-          let data = res.data.products;
-          let categoriesData = [...new Set(data.map(item => item.category))];
-          let unitsData = [...new Set(data.map(item => item.unit))];
-          setCategories(categoriesData) // ProductModal中的已選分類清單
-          setUnits(unitsData) // ProductModal中的已選單位清單
-        })
-    } catch (error) {
-      console.error(error)
-    }
-  }, [API_URL, AUTHOR]);
-
+  
   // 新增商品資料
   const createProduct = async () => {
     dispatch(showLoading("新增商品資料中..."));

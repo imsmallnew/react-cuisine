@@ -18,53 +18,6 @@ export default function AdminHome() {
     const [totalRevenue, setTotalRevenue] = useState(0);
     const [orderStatus, setOrderStatus] = useState([]);
 
-    // 檢查登入狀態
-    const checkUserLogin = useCallback(async () => {
-        dispatch(showLoading("讀取中..."));
-
-        try {
-            await axios.post(`${API_URL}/v2/api/user/check`)
-            fetchAllOrders();
-        } catch (error) {
-            alert(error?.response?.data?.message)
-            navigate("/login")
-        }
-    }, [API_URL, fetchAllOrders, dispatch, navigate]);
-
-    // 獲取所有頁數的訂單資料
-    const fetchAllOrders = useCallback(async () => {
-        // dispatch(showLoading("讀取中..."));
-        try {
-            const firstResponse = await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders`);
-            const { total_pages } = firstResponse.data.pagination;
-
-            let allOrders = firstResponse.data.orders; // 儲存第一頁的訂單資料
-
-            // 依 total_pages 取得所有訂單
-            const requests = [];
-            for (let page = 2; page <= total_pages; page++) {
-                requests.push(axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders?page=${page}`));
-            }
-
-            const responses = await Promise.all(requests);
-            responses.forEach(res => {
-                allOrders = allOrders.concat(res.data.orders);
-            });
-
-            calculateSales(allOrders);
-            calculateOrderStatus(allOrders);
-        } catch (error) {
-            console.error(error);
-            dispatch(pushMessage({
-                title: "獲取訂單失敗",
-                text: error?.response?.data?.message || `請稍後再試`,
-                status: "failed"
-            }))
-        } finally {
-            dispatch(hideLoading());
-        }
-    }, [API_URL, AUTHOR, calculateOrderStatus, calculateSales, dispatch]);
-
     // 處理訂單數據
     const calculateSales = useCallback((ordersData) => {
         const productSales = {}; // 存放 { 產品名稱: { totalNum, totalAmount } }
@@ -130,6 +83,53 @@ export default function AdminHome() {
 
         setOrderStatus(statusList);
     }, []);
+
+    // 獲取所有頁數的訂單資料
+    const fetchAllOrders = useCallback(async () => {
+        // dispatch(showLoading("讀取中..."));
+        try {
+            const firstResponse = await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders`);
+            const { total_pages } = firstResponse.data.pagination;
+
+            let allOrders = firstResponse.data.orders; // 儲存第一頁的訂單資料
+
+            // 依 total_pages 取得所有訂單
+            const requests = [];
+            for (let page = 2; page <= total_pages; page++) {
+                requests.push(axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders?page=${page}`));
+            }
+
+            const responses = await Promise.all(requests);
+            responses.forEach(res => {
+                allOrders = allOrders.concat(res.data.orders);
+            });
+
+            calculateSales(allOrders);
+            calculateOrderStatus(allOrders);
+        } catch (error) {
+            console.error(error);
+            dispatch(pushMessage({
+                title: "獲取訂單失敗",
+                text: error?.response?.data?.message || `請稍後再試`,
+                status: "failed"
+            }))
+        } finally {
+            dispatch(hideLoading());
+        }
+    }, [API_URL, AUTHOR, calculateOrderStatus, calculateSales, dispatch]);
+
+    // 檢查登入狀態
+    const checkUserLogin = useCallback(async () => {
+        dispatch(showLoading("讀取中..."));
+
+        try {
+            await axios.post(`${API_URL}/v2/api/user/check`)
+            fetchAllOrders();
+        } catch (error) {
+            alert(error?.response?.data?.message)
+            navigate("/login")
+        }
+    }, [API_URL, fetchAllOrders, dispatch, navigate]);
 
     // 若有Cookie則直接驗證, 若失敗則導回login
     useEffect(() => {
