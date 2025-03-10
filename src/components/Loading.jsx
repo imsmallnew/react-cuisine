@@ -22,6 +22,6 @@ export default function Loading({
 }
 
 // 定義PropTypes
-Loading.prototype = {
+Loading.propTypes = {
     loadingText: PropTypes.string,
 }

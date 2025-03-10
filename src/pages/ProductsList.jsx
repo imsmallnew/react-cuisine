@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
@@ -16,7 +16,7 @@ export default function ProductsList() {
   const [cartItem, setCartItem] = useState({});
   const [state, setState] = useState(false);
   const [clientProductList, setClientProductList] = useState(null);
-  const [navigation, setNavigation] = useState("menu");
+  const [navigation] = useState("menu");
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   // 依分類篩選產品
@@ -25,7 +25,7 @@ export default function ProductsList() {
     : clientProductList;
 
   // 取得客戶商品資料
-  const getClientProducts = async () => {
+  const getClientProducts = useCallback(async () => {
     dispatch(showLoading("讀取中..."));
 
     try {
@@ -42,18 +42,18 @@ export default function ProductsList() {
     } finally {
       dispatch(hideLoading());
     }
-  }
+  }, [API_URL, AUTHOR, dispatch]);
 
   useEffect(() => {
     getClientProducts()
-  }, [['menu'].includes(navigation)])
+  }, [navigation, getClientProducts])
 
   // 加入購物車
   const addCartItem = async (item, qty) => {
     setCartItem(item)
     setState(true)
     try {
-      const res = await axios.post(`${API_URL}/v2/api/${AUTHOR}/cart`, {
+      await axios.post(`${API_URL}/v2/api/${AUTHOR}/cart`, {
         data: {
           product_id: item.id,
           qty: Number(qty)

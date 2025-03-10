@@ -7,6 +7,7 @@ export default function OrderModal({
     handleChangeOption
 }) {
     const productsArray = Object.values(targetOrder?.products || {});
+    
     return (
         <div
             className="modal fade"

@@ -59,7 +59,7 @@ export default function OrderMenu({
                                             type="button"
                                             className={`btn ${item?.id === targetOrder?.id ? "btn-secondary btn-sm" : "btn-outline-secondary btn-sm"}`}
                                             disabled={state}
-                                            onClick={(v) => {
+                                            onClick={() => {
                                                 setTargetOrder(item)
                                                 openOrderModal(item)
                                             }}><i className="fas fa-search"></i>

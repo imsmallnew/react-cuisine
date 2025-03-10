@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactLoading from 'react-loading';
 import axios from 'axios';
@@ -12,7 +12,6 @@ export default function AdminHome() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [orders, setOrders] = useState([]);
     const [calculate, setCalculate] = useState(true);
     const [topSalesByQuantity, setTopSalesByQuantity] = useState([]);
     const [topSalesByAmount, setTopSalesByAmount] = useState([]);
@@ -20,34 +19,20 @@ export default function AdminHome() {
     const [orderStatus, setOrderStatus] = useState([]);
 
     // 檢查登入狀態
-    const checkUserLogin = async () => {
+    const checkUserLogin = useCallback(async () => {
         dispatch(showLoading("讀取中..."));
 
         try {
-            const res = await axios.post(`${API_URL}/v2/api/user/check`)
+            await axios.post(`${API_URL}/v2/api/user/check`)
             fetchAllOrders();
         } catch (error) {
             alert(error?.response?.data?.message)
             navigate("/login")
         }
-    }
-
-    // 若有Cookie則直接驗證, 若失敗則導回login
-    useEffect(() => {
-        const token = document.cookie.replace(
-            /(?:(?:^|.*;\s*)reactHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",
-        );
-        if (token.length > 0) {
-            axios.defaults.headers.common['Authorization'] = token;
-            checkUserLogin()
-        } else {
-            dispatch(hideLoading())
-            navigate("/login")
-        }
-    }, [])
+    }, [API_URL, fetchAllOrders, dispatch, navigate]);
 
     // 獲取所有頁數的訂單資料
-    const fetchAllOrders = async () => {
+    const fetchAllOrders = useCallback(async () => {
         // dispatch(showLoading("讀取中..."));
         try {
             const firstResponse = await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders`);
@@ -66,7 +51,6 @@ export default function AdminHome() {
                 allOrders = allOrders.concat(res.data.orders);
             });
 
-            setOrders(allOrders);
             calculateSales(allOrders);
             calculateOrderStatus(allOrders);
         } catch (error) {
@@ -79,10 +63,10 @@ export default function AdminHome() {
         } finally {
             dispatch(hideLoading());
         }
-    };
+    }, [API_URL, AUTHOR, calculateOrderStatus, calculateSales, dispatch]);
 
     // 處理訂單數據
-    const calculateSales = (ordersData) => {
+    const calculateSales = useCallback((ordersData) => {
         const productSales = {}; // 存放 { 產品名稱: { totalNum, totalAmount } }
         let totalRevenue = 0; // 訂單總金額
 
@@ -116,10 +100,10 @@ export default function AdminHome() {
         setTopSalesByAmount(sortedByAmount);
         setTotalRevenue(totalRevenue);
         setCalculate(false);
-    };
+    }, []);
 
     // 計算訂單狀態
-    const calculateOrderStatus = (ordersData) => {
+    const calculateOrderStatus = useCallback((ordersData) => {
         const today = new Date().toISOString().split("T")[0]; // 取得今日日期 (YYYY-MM-DD)
         let todayOrders = 0;
         let paidOrders = 0;
@@ -145,7 +129,22 @@ export default function AdminHome() {
         ];
 
         setOrderStatus(statusList);
-    };
+    }, []);
+
+    // 若有Cookie則直接驗證, 若失敗則導回login
+    useEffect(() => {
+        const token = document.cookie.replace(
+            /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
+        );
+
+        if (token.length > 0) {
+            axios.defaults.headers.common['Authorization'] = token;
+            checkUserLogin()
+        } else {
+            dispatch(hideLoading())
+            navigate("/login")
+        }
+    }, [checkUserLogin, dispatch, navigate]);
 
     return (
         <>

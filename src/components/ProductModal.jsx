@@ -23,7 +23,6 @@ export default function ProductModal({
                         <h5 className="modal-title fs-4 text-white">{target === "create" ? "新增商品" : "編輯商品"}</h5>
                         <button type="button" className="btn-close bg-white" aria-label="Close" onClick={() => closeProductModal()}></button>
                     </div>
-
                     <div className="modal-body p-4">
                         <div className="row g-4">
                             <div className="col-md-10">
@@ -104,7 +103,6 @@ export default function ProductModal({
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="row g-3 mb-3">
                                     <div className="col-6">
                                         <label htmlFor="origin_price" className="form-label">

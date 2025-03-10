@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
@@ -30,7 +30,6 @@ export default function AdminProducts() {
     imageUrl: "",
     imagesUrl: []
   };
-  const [isAuth, setInsAuth] = useState(false);
   const [pageInfo, setPageInfo] = useState({});
   const [page, setPage] = useState(Number(page_value));
   const [productList, setProductList] = useState([]);
@@ -40,7 +39,7 @@ export default function AdminProducts() {
   const [tempImgUrl, setTempImgUrl] = useState(null);
   const [state, setState] = useState(false);
   const [target, setTarget] = useState(null);
-  const [navigation, setNavigation] = useState("admin");
+  const [navigation] = useState("admin");
   const [cartItem, setCartItem] = useState({});
   const productModalRef = useRef(null);
   const productModalInstanceRef = useRef(null);
@@ -48,13 +47,12 @@ export default function AdminProducts() {
   const deleteModalInstanceRef = useRef(null);
 
   // 檢查登入狀態
-  const checkUserLogin = async () => {
+  const checkUserLogin = useCallback(async () => {
     dispatch(showLoading("讀取中..."));
 
     try {
-      const res = await axios.post(`${API_URL}/v2/api/user/check`)
+      await axios.post(`${API_URL}/v2/api/user/check`)
       getProducts(page)
-      setInsAuth(true);
     } catch (error) {
       dispatch(pushMessage({
         title: "系統提示",
@@ -65,12 +63,12 @@ export default function AdminProducts() {
     } finally {
       dispatch(hideLoading());
     }
-  }
+  }, [API_URL, dispatch, getProducts, navigate, page]);
 
   // 若有Cookie則直接驗證, 若失敗則導回login
   useEffect(() => {
     const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)reactHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",
+      /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
     );
     if (token.length > 0) {
       axios.defaults.headers.common['Authorization'] = token;
@@ -78,19 +76,19 @@ export default function AdminProducts() {
     } else {
       navigate("/login")
     }
-  }, [])
+  }, [checkUserLogin, navigate])
 
   // 當 `page` 變更時，取得資料
   useEffect(() => {
     getProducts(page);
-  }, [page]);
+  }, [page, getProducts]);
 
   // 當網址 (`page_value`) 變更時，更新 `page`
   useEffect(() => {
     if (Number(page_value) !== page) {
       setPage(Number(page_value));
     }
-  }, [page_value]);
+  }, [page_value, setPage, page]);
 
   // 點擊頁碼時，更新網址 & page
   const handlePageChange = (newPage) => {
@@ -99,7 +97,7 @@ export default function AdminProducts() {
   };
 
   // 取得特定頁面商品資料
-  const getProducts = async (page) => {
+  const getProducts = useCallback(async (page) => {
     dispatch(showLoading("讀取中..."));
 
     try {
@@ -123,10 +121,10 @@ export default function AdminProducts() {
     } finally {
       dispatch(hideLoading());
     }
-  }
+  }, [API_URL, AUTHOR, dispatch, getAllProducts]);
 
   // 獲取所有不分頁商品
-  const getAllProducts = async () => {
+  const getAllProducts = useCallback(async () => {
     try {
       await axios.get(`${API_URL}/v2/api/${AUTHOR}/products/all`)
         .then((res) => {
@@ -139,7 +137,7 @@ export default function AdminProducts() {
     } catch (error) {
       console.error(error)
     }
-  }
+  }, [API_URL, AUTHOR]);
 
   // 新增商品資料
   const createProduct = async () => {
@@ -213,7 +211,7 @@ export default function AdminProducts() {
   }
 
   // 刪除商品資料
-  const deleteProduct = async (id) => {
+  const deleteProduct = async () => {
     dispatch(showLoading("刪除商品資料中..."));
 
     try {
@@ -431,7 +429,6 @@ export default function AdminProducts() {
       console.error("Modal instance is not initialized.");
     }
   };
-
 
   // 將焦點從 modal 中移除
   window.addEventListener('hide.bs.modal', () => {

@@ -29,7 +29,7 @@ export default function Toast() {
                 timeoutRef.current = null; // 清空 reference
             }, 3000); // 三秒後關閉
         })
-    }, [messages])
+    }, [messages, dispatch])
 
     useEffect(() => {
         return () => {

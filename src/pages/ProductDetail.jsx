@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
@@ -20,11 +20,10 @@ export default function ProductDetail() {
     const [clientProductList, setClientProductList] = useState([]);
     const [prevProductId, setPrevProductId] = useState(null);
     const [nextProductId, setNextProductId] = useState(null);
-    const [state, setState] = useState(false);
     const [orderQty, setOrderQty] = useState(1);
 
     // 取得所有商品資料
-    const getClientProducts = async () => {
+    const getClientProducts = useCallback(async () => {
         dispatch(showLoading("讀取中..."));
 
         try {
@@ -36,10 +35,10 @@ export default function ProductDetail() {
         } finally {
             dispatch(hideLoading());
         }
-    }
+    }, [API_URL, AUTHOR, dispatch]);
 
     // 取得指定商品資料
-    const getProductDetail = async () => {
+    const getProductDetail = useCallback(async () => {
         // dispatch(showLoading("讀取中..."));
 
         try {
@@ -53,7 +52,7 @@ export default function ProductDetail() {
         } finally {
             dispatch(hideLoading());
         }
-    }
+    }, [API_URL, AUTHOR, product_id, dispatch]);
 
     // 計算上一個 / 下一個商品 ID
     useEffect(() => {
@@ -69,18 +68,18 @@ export default function ProductDetail() {
 
     useEffect(() => {
         getClientProducts();
-    }, []);
+    }, [getClientProducts]);
 
     useEffect(() => {
         getProductDetail();
-    }, [product_id]);
+    }, [product_id, getProductDetail]);
 
     // 加入購物車
     const addCartItem = async (item, qty) => {
         dispatch(showLoading("加入購物車中..."));
 
         try {
-            const res = await axios.post(`${API_URL}/v2/api/${AUTHOR}/cart`, {
+            await axios.post(`${API_URL}/v2/api/${AUTHOR}/cart`, {
                 data: {
                     product_id: item.id,
                     qty: Number(qty)
@@ -93,7 +92,6 @@ export default function ProductDetail() {
                 status: "success"
             }))
             setOrderQty(1); // 還原初始值數量
-            setState(false); // 取消按鈕disabled
         } catch (error) {
             console.error(error)
             dispatch(pushMessage({

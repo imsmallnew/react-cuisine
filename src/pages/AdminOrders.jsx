@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
@@ -16,24 +16,22 @@ export default function AdminOrders() {
   const { page: page_value } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isAuth, setInsAuth] = useState(false);
   const [pageInfo, setPageInfo] = useState({});
   const [page, setPage] = useState(Number(page_value));
   const [orderList, setOrderList] = useState([]);
   const [targetOrder, setTargetOrder] = useState({})
   const [state, setState] = useState(false);
-  const [navigation, setNavigation] = useState("admin");
-  const [cartItem, setCartItem] = useState({});
+  const [navigation] = useState("admin");
+  const [cartItem] = useState({});
   const orderModalRef = useRef(null);
   const orderModalInstanceRef = useRef(null);
 
   // 檢查登入狀態
-  const checkUserLogin = async () => {
+  const checkUserLogin = useCallback(async () => {
     dispatch(showLoading("讀取中..."));
     try {
-      const res = await axios.post(`${API_URL}/v2/api/user/check`)
+      await axios.post(`${API_URL}/v2/api/user/check`)
       getOrders(page)
-      setInsAuth(true);
     } catch (error) {
       dispatch(pushMessage({
         title: "系統提示",
@@ -44,12 +42,12 @@ export default function AdminOrders() {
     } finally {
       dispatch(hideLoading());
     }
-  }
+  }, [API_URL, dispatch, getOrders, navigate, page]);
 
   // 若有Cookie則直接驗證, 若失敗則導回login
   useEffect(() => {
     const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)reactHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",
+      /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
     );
     if (token.length > 0) {
       axios.defaults.headers.common['Authorization'] = token;
@@ -57,19 +55,19 @@ export default function AdminOrders() {
     } else {
       navigate("/login")
     }
-  }, [])
+  }, [checkUserLogin, navigate])
 
   // 當 `page` 變更時，取得資料
   useEffect(() => {
     getOrders(page);
-  }, [page]);
+  }, [page, getOrders]);
 
   // 當網址 (`page_value`) 變更時，更新 `page`
   useEffect(() => {
     if (Number(page_value) !== page) {
       setPage(Number(page_value));
     }
-  }, [page_value]);
+  }, [page_value, setPage, page]);
 
   // 點擊頁碼時，更新網址 & page
   const handlePageChange = (newPage) => {
@@ -78,7 +76,7 @@ export default function AdminOrders() {
   };
 
   // 取得訂單資料
-  const getOrders = async (page) => {
+  const getOrders = useCallback(async (page) => {
     dispatch(showLoading("讀取中..."));
     try {
       await axios.get(`${API_URL}/v2/api/${AUTHOR}/orders?page=${page}`)
@@ -96,7 +94,7 @@ export default function AdminOrders() {
     } finally {
       dispatch(hideLoading());
     }
-  }
+  }, [API_URL, AUTHOR, dispatch]);
 
   // 更新付款狀態
   const updatePay = async (product) => {

@@ -27,12 +27,10 @@ export default function Cart() {
     imageUrl: "",
     imagesUrl: []
   };
-  // const [cartList, setCartList] = useState({});
-  const [state, setState] = useState(false);
-  const [tempProduct, setTempProduct] = useState(defaultModalState);
+  const [tempProduct] = useState(defaultModalState);
   const [cartItem, setCartItem] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [navigation, setNavigation] = useState("cart");
+  const [isLoading] = useState(false);
+  const [navigation] = useState("cart");
   const deleteModalRef = useRef(null);
   const deleteModalInstanceRef = useRef(null);
 
@@ -46,9 +44,6 @@ export default function Cart() {
   // 開啟 DeleteModal
   const openDeleteModal = (item) => {
     setCartItem(item);
-    setTimeout(() => {
-      setState(false)
-    }, 500)
     if (deleteModalInstanceRef.current) {
       deleteModalInstanceRef.current.show(); // 確保 Modal 實例已初始化後調用 show()
     } else {
@@ -126,7 +121,7 @@ export default function Cart() {
     dispatch(showLoading("移除購物車商品中..."));
 
     try {
-      const res = await axios.delete(`${API_URL}/v2/api/${AUTHOR}/cart/${cartItem.id}`)
+      await axios.delete(`${API_URL}/v2/api/${AUTHOR}/cart/${cartItem.id}`)
       closeDeleteModal()
       dispatch(getCartList())
       dispatch(pushMessage({
@@ -151,7 +146,7 @@ export default function Cart() {
     dispatch(showLoading("清空購物車商品中..."));
 
     try {
-      const res = await axios.delete(`${API_URL}/v2/api/${AUTHOR}/carts`)
+      await axios.delete(`${API_URL}/v2/api/${AUTHOR}/carts`)
       closeDeleteModal()
       dispatch(getCartList())
       dispatch(pushMessage({

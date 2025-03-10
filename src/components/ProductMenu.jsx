@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export default function ProductMenu({
     state,
-    productList,
+    productList = [], // 確保 productList 有預設值，避免 .map() 遇到 null/undefined
     tempProduct,
     openProductModal,
     openDeleteModal,
@@ -76,9 +76,9 @@ export default function ProductMenu({
 }
 
 // 定義PropTypes
-ProductMenu.proptypes = {
+ProductMenu.propTypes = {
     state: PropTypes.bool,
-    productList: PropTypes.shape({
+    productList: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         title: PropTypes.string,
         category: PropTypes.string,
@@ -86,7 +86,7 @@ ProductMenu.proptypes = {
         price: PropTypes.number,
         is_enabled: PropTypes.number,
         imageUrl: PropTypes.string,
-    }),
+    })),
     tempProduct: PropTypes.shape({
         id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),

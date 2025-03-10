@@ -14,12 +14,12 @@ export default function ClientProductModal({
     const handleItemQtyChange = async (e) => {
         setOrderQty(Number(e.target.value))
     };
+
     return (
         <>
             <div id="clientProductModal" ref={clientProductModalRef} className="modal" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content border-0 shadow">
-
                         <div className="modal-body">
                             <div className="card">
                                 <div className="row">
@@ -74,7 +74,6 @@ export default function ClientProductModal({
                                 </div>
                             </div>
                         </div>
-
                         <div className="modal-footer border-top bg-light">
                             <button type="button" className="btn btn-secondary" onClick={() => closeClientProductModal()}>
                                 取消

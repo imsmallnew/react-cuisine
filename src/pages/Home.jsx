@@ -83,7 +83,7 @@ export default function Home() {
                         className="display-3 fw-bold text-shadow"
                         style={{ opacity: textOpacity, transform: `translateY(${textY}px)` }}
                     >
-                        Daniel's Burger
+                        Daniel&apos;s Burger
                     </motion.h1>
 
                     <motion.p

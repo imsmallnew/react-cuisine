@@ -15,7 +15,7 @@ export default function FrontLayout() {
     // 透過cartSlice取得購物車資料
     useEffect(() => {
         dispatch(getCartList());
-    }, []);
+    }, [dispatch]);
 
     const navList = [
         { path: "/", name: "首頁", navName: 'home' },
@@ -88,7 +88,7 @@ export default function FrontLayout() {
                 <div className="container">
                     <div className="d-flex align-items-center justify-content-center text-white py-2">
                         <p className="mb-0 text-center">
-                            &copy; 2024 - Daniel's Burger All Rights Reserved.
+                            &copy; 2024 - Daniel&apos;s Burger All Rights Reserved.
                         </p>
                     </div>
                 </div>

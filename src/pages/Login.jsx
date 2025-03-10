@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
@@ -9,7 +9,6 @@ import { showLoading, hideLoading } from "../redux/loadingSlice";
 
 export default function Login() {
     const API_URL = import.meta.env.VITE_BASE_URL;
-    const AUTHOR = import.meta.env.VITE_API_PATH;
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -52,11 +51,11 @@ export default function Login() {
     }
 
     // 檢查登入狀態
-    const checkUserLogin = async () => {
+    const checkUserLogin = useCallback(async () => {
         dispatch(showLoading("讀取中..."));
 
         try {
-            const res = await axios.post(`${API_URL}/v2/api/user/check`)
+            await axios.post(`${API_URL}/v2/api/user/check`)
             dispatch(pushMessage({
                 title: "系統提示",
                 text: "驗證登入成功, 歡迎進入商品管理後台",
@@ -73,18 +72,18 @@ export default function Login() {
         } finally {
             dispatch(hideLoading());
         }
-    }
-
+    }, [API_URL, dispatch, navigate]);
+    
     // 若有Cookie則直接驗證
     useEffect(() => {
         const token = document.cookie.replace(
-            /(?:(?:^|.*;\s*)reactHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",
+            /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
         );
         if (token.length > 0) {
             axios.defaults.headers.common['Authorization'] = token;
             checkUserLogin()
         }
-    }, [])
+    }, [checkUserLogin])
 
     // 處理輸入框
     const handleInputChange = (e) => {
@@ -138,7 +137,7 @@ export default function Login() {
                             </div>
                             <button className="btn btn-primary">登入</button>
                         </form>
-                        <p className="mt-5 mb-3 text-muted">&copy; 2024 - Daniel's Burger All Rights Reserved.</p>
+                        <p className="mt-5 mb-3 text-muted">&copy; 2024 - Daniel&apos;s Burger All Rights Reserved.</p>
                     </div>
                 </div>
             </div>

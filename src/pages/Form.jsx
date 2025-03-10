@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, Link } from "react-router-dom";
@@ -15,7 +15,6 @@ export default function Form() {
   const navigate = useNavigate();
   const { cartList } = useSelector((state) => state.cart);
   const [isSubmit, setIsSubmit] = useState(false);
-  // const [cartList, setCartList] = useState({});
 
   const {
     register,
@@ -37,19 +36,19 @@ export default function Form() {
     }
   }
 
-  const navToMenu = () => {
+  const navToMenu = useCallback(() => {
     const timer = setTimeout(() => {
       navigate("/"); //   未動作, 10秒後導航到首頁
     }, 10000);
 
     return () => clearTimeout(timer);
-  }
+  }, [navigate]);
 
   // 結帳表單
   const checkout = async (data) => {
     dispatch(showLoading("表單傳送中..."));
     try {
-      const res = await axios.post(`${API_URL}/v2/api/${AUTHOR}/order`, data)
+      await axios.post(`${API_URL}/v2/api/${AUTHOR}/order`, data)
       reset()
       dispatch(getCartList())
       dispatch(pushMessage({
@@ -58,7 +57,7 @@ export default function Form() {
         status: "success"
       }))
       setIsSubmit(true)
-    } catch (error) {
+    } catch {
       dispatch(pushMessage({
         title: "系統提示",
         text: '結帳失敗',
@@ -93,8 +92,14 @@ export default function Form() {
   // 透過cartSlice取得購物車資料
   useEffect(() => {
     dispatch(getCartList());
-    cartList?.carts?.length === 0 && navToMenu() // 如果購物車為空則跳回商品頁面
-  }, [cartList?.carts?.length === 0]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const isCartEmpty = cartList?.carts?.length === 0;
+    if (isCartEmpty) {
+      navToMenu();
+    }
+  }, [cartList?.carts?.length, navToMenu]);
 
   return (
     <>
