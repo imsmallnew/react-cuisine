@@ -53,7 +53,7 @@ export default function ProductMenu({
                                 </td>
                                 <td className="">
                                     <div className="btn-group float-end">
-                                        <button type="button" className={`btn ${item?.id === tempProduct?.id ? "btn-secondary btn-sm" : "btn-outline-secondary btn-sm"}`} onClick={(v) => {
+                                        <button type="button" className={`btn ${item?.id === tempProduct?.id ? "btn-secondary btn-sm" : "btn-outline-secondary btn-sm"}`} onClick={() => {
                                             setTempProduct(item)
                                             setTempImgUrl(item.imageUrl)
                                         }}>檢視商品 <i className="fas fa-search"></i>
