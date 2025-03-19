@@ -37,7 +37,7 @@ export default function FrontLayout() {
             <nav className="navbar navbar-light navbar-expand-lg fixed-top shadow">
                 <div className="container">
                     <a className="navbar-brand site-title">
-                        <img src='../../public/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger
+                        <img src='/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger
                     </a>
 
                     {/* 漢堡選單按鈕 (手機版) */}

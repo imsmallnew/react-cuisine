@@ -106,7 +106,7 @@ export default function Login() {
             <nav className="navbar navbar-light navbar-expand text-primary navbar-toggleable fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
                     <a className="navbar-brand site-title">
-                        <img src='../../public/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel's Burger Admin
+                        <img src='/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel's Burger Admin
                     </a>
                     <div className="d-flex">
                         <NavLink

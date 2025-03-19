@@ -30,7 +30,7 @@ export default function AdminLayout() {
             <nav className="navbar navbar-light navbar-expand-lg text-primary fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
                     <a className="navbar-brand site-title">
-                        <img src='../../public/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger Admin
+                        <img src='/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger Admin
                     </a>
 
                     {/* 漢堡選單按鈕 (手機版) */}
