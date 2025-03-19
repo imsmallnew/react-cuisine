@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 import Toast from '../components/Toast';
 import { pushMessage } from '../redux/toastSlice';
 import { showLoading, hideLoading } from "../redux/loadingSlice";
+import logo from '../assets/logo.png';
 
 export default function Login() {
     const API_URL = import.meta.env.VITE_BASE_URL;
@@ -106,7 +107,7 @@ export default function Login() {
             <nav className="navbar navbar-light navbar-expand text-primary navbar-toggleable fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
                     <a className="navbar-brand site-title">
-                        <img src='/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel's Burger Admin
+                        <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel's Burger Admin
                     </a>
                     <div className="d-flex">
                         <NavLink

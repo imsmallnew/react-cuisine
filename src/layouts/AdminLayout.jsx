@@ -4,6 +4,7 @@ import { useState } from 'react';
 import LogoutBtn from '../components/LogoutBtn';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
+import logo from '../assets/logo.png';
 
 export default function AdminLayout() {
     const { isLoading, loadingText } = useSelector((state) => state.loading);
@@ -30,7 +31,7 @@ export default function AdminLayout() {
             <nav className="navbar navbar-light navbar-expand-lg text-primary fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
                     <a className="navbar-brand site-title">
-                        <img src='/logo.png' style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger Admin
+                        <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger Admin
                     </a>
 
                     {/* 漢堡選單按鈕 (手機版) */}
