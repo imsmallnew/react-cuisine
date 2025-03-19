@@ -135,9 +135,9 @@ export default function Home() {
                             scale: imageScale
                         }}
                     />
-                    <div className="position-relative d-flex flex-column gap-3 p-4 w-75">
+                    <div className="position-relative d-flex flex-column gap-3 p-2 mt-5 w-75">
                         <motion.h2
-                            className="display-5 fw-bold text-shadow"
+                            className="display-5 fw-bold text-shadow mt-5"
                             initial={{ x: -100, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
                             transition={{ duration: 0.8 }}
