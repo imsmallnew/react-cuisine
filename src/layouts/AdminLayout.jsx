@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { Outlet, NavLink, useLocation, Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useState } from 'react';
 import LogoutBtn from '../components/LogoutBtn';
@@ -30,9 +30,9 @@ export default function AdminLayout() {
             {/* 導覽列 */}
             <nav className="navbar navbar-light navbar-expand-lg text-primary fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
-                    <a className="navbar-brand site-title">
+                    <Link className="navbar-brand site-title" to={`/admin`}>
                         <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger Admin
-                    </a>
+                    </Link>
 
                     {/* 漢堡選單按鈕 (手機版) */}
                     <button
@@ -54,11 +54,11 @@ export default function AdminLayout() {
                                             to={route.path}
                                             onClick={() => setMenuOpen(false)} // 點擊後關閉選單
                                             className={() =>
-                                                `btn btn-sm ${(route.navName === "products" && isProductPage) ||
-                                                    (route.navName === "orders" && isOrderPage) ||
-                                                    (isExactMatch)
-                                                    ? "btn-secondary"
-                                                    : "btn-outline-secondary"
+                                                `btn ${menuOpen ? "btn-lg" : "btn-sm"} ${(route.navName === "products" && isProductPage) ||
+                                                (route.navName === "orders" && isOrderPage) ||
+                                                (isExactMatch)
+                                                ? "btn-secondary"
+                                                : "btn-outline-secondary"
                                                 } ms-2`
                                             }
                                         >
@@ -67,7 +67,7 @@ export default function AdminLayout() {
                                     </li>
                                 );
                             })}
-                            <li className="nav-item ms-2 logout"><LogoutBtn /></li>
+                            <li className="nav-item ms-2 logout"><LogoutBtn menuOpen={menuOpen} /></li>
                         </ul>
                     </div>
                 </div>

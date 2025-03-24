@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { Outlet, NavLink, useLocation, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
 import Toast from '../components/Toast';
@@ -37,9 +37,9 @@ export default function FrontLayout() {
             {/* 導覽列 */}
             <nav className="navbar navbar-light navbar-expand-lg fixed-top shadow">
                 <div className="container">
-                    <a className="navbar-brand site-title">
+                    <Link className="navbar-brand site-title" to={`/`}>
                         <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger
-                    </a>
+                    </Link>
 
                     {/* 漢堡選單按鈕 (手機版) */}
                     <button
@@ -60,7 +60,7 @@ export default function FrontLayout() {
                                             key={index}
                                             to={route.path}
                                             className={({ isActive }) =>
-                                                `btn btn-sm ${isActive ? "btn-secondary" : "btn-light"} ms-3 position-relative`
+                                                `btn ${menuOpen ? "btn-lg" : "btn-sm"} ${isActive ? "btn-secondary" : "btn-light"} ms-3 position-relative`
                                             }
                                             onClick={() => setMenuOpen(false)} // 點擊後關閉選單
                                         >

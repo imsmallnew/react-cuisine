@@ -149,20 +149,20 @@ export default function AdminHome() {
     return (
         <>
             <div
-                className="position-absolute top-0 start-0 w-100 vh-100"
+                className="position-fixed w-100"
                 style={{
-                    backgroundImage:
-                        "url('https://images.unsplash.com/photo-1491960693564-421771d727d6?q=80&w=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+                    minHeight: "100vh",
+                    backgroundImage: "url('https://images.unsplash.com/photo-1491960693564-421771d727d6?q=80&w=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
+                    overflow: "auto",
                 }}
             />
 
             <div className="container mt-5 pt-2">
                 <div className="main text-white mb-5 text-center">
                     <h1>歡迎來到商品管理後台！</h1>
-                    <p>*** 這裡會放 Dashboard 來顯示客戶的購物紀錄 ***</p>
                 </div>
 
                 <div className="row">

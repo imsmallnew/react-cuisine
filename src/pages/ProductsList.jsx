@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
 import ReactLoading from 'react-loading';
@@ -18,11 +18,21 @@ export default function ProductsList() {
   const [clientProductList, setClientProductList] = useState(null);
   const [navigation] = useState("menu");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const location = useLocation();
 
   // 依分類篩選產品
   const filteredProducts = selectedCategory
     ? clientProductList?.filter(item => item.category === selectedCategory)
     : clientProductList;
+  
+    useEffect(() => {
+      const searchParams = new URLSearchParams(location.search);
+      const categoryFromUrl = searchParams.get("category");
+
+      if (categoryFromUrl) {
+          setSelectedCategory(categoryFromUrl);
+      }
+  }, [location.search, setSelectedCategory]);
 
   // 取得客戶商品資料
   const getClientProducts = useCallback(async () => {

@@ -136,7 +136,7 @@ export default function ProductDetail() {
                 }}
             ></div>
 
-            <div className="row position-relative m-4" style={{ zIndex: 2 }}>
+            <div className="row position-relative m-2" style={{ zIndex: 2 }}>
                 {/* 左側箭頭 (若有上一個商品) */}
                 <div className="col-1 d-flex align-items-center justify-content-center">
                     {prevProductId && (
@@ -153,7 +153,7 @@ export default function ProductDetail() {
                 </div>
 
                 {/* 產品詳細卡片 */}
-                <div className="col-10">
+                <div className="col-md-10 col-12">
                     <AnimatePresence mode="wait">
                         <motion.div
                             className="card shadow-lg p-4"
@@ -172,8 +172,8 @@ export default function ProductDetail() {
                             <div className="row">
 
                                 {/* 主圖片區塊 */}
-                                <div className="col-md-4">
-                                    <div className="mainWrap overflow-hidden position-relative ms-3" style={{ borderRadius: "12px", height: "100%" }}>
+                                <div className="col-lg-4">
+                                    <div className="mainWrap overflow-hidden position-relative ms-lg-3" style={{ borderRadius: "12px", height: "100%" }}>
                                         <motion.img
                                             src={productImgUrl}
                                             className="object-fit-cover img-fluid w-100 h-100 rounded"
@@ -196,7 +196,7 @@ export default function ProductDetail() {
 
                                 {/* 產品內容 */}
                                 <div className="col-md-8">
-                                    <div className="card-body text-white">
+                                    <div className="card-body text-white px-md-3 px-0">
                                         <h2 className="card-title">{product.title}</h2>
                                         <h5><span className="badge bg-danger">{product.category}</span></h5>
                                         <p className="card-text">商品描述: <small className="text-light">{product.description}</small></p>

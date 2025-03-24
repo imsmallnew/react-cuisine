@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import Loading from '../components/Loading';
@@ -106,9 +106,9 @@ export default function Login() {
             {/* 導覽列 */}
             <nav className="navbar navbar-light navbar-expand text-primary navbar-toggleable fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
-                    <a className="navbar-brand site-title">
+                    <Link className="navbar-brand site-title" to={`/admin`}>
                         <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel's Burger Admin
-                    </a>
+                    </Link>
                     <div className="d-flex">
                         <NavLink
                             to={"/"}

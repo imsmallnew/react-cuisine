@@ -44,6 +44,45 @@ input[type="checkbox"] {
   background: transparent;
 }
 
+.btn-hover {
+  position: relative;
+  overflow: hidden;
+  z-index: 1; /* 確保內容在最上層 */
+}
+
+.btn-hover:before,
+.btn-hover:after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.4s ease-in-out;
+  -webkit-clip-path: circle(0 at 50% 50%);
+  clip-path: circle(0 at 50% 50%);
+  z-index: 0;
+}
+
+.btn-hover:before {
+  background-color: hsla(0, 0%, 100%, 0.2);
+}
+
+.btn-hover:after {
+  background-color: #242424;
+}
+
+.btn-hover:hover:before,
+.btn-hover:hover:after {
+  -webkit-clip-path: circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
+}
+
+.btn-hover span {
+  position: relative;
+  z-index: 1;
+}
+
 /* 全頁讀取效果 */
 .loading {
   position: fixed;
@@ -66,6 +105,28 @@ input[type="checkbox"] {
   z-index: 1;
   margin-top: 80px;
 }
+
+/* .navbar-collapse {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(-100%);
+  z-index: 1050;
+}
+
+.navbar-collapse.show {
+  opacity: 1;
+  transform: translateY(0);
+} */
 
 /* 文字陰影 */
 .text-shadow {
@@ -233,6 +294,112 @@ thead {
   font-weight: bold;
 }
 
+
+.textLeft {
+  margin-left: -13%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.textRight {
+  margin-left: 13%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Hover 時滑動效果 */
+.textLeft:hover {
+  margin-left: -10%;
+}
+
+.textRight:hover {
+  margin-left: 10%;
+}
+
+.star-container {
+  top: 0;
+  right: 0;
+  padding: 0.5rem;
+}
+
+.star-icon {
+  font-size: 1.25rem; /* 標準大小 */
+}
+
+.blurred-bg {
+  position: relative;
+  background-image: url('https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a6?w=1024&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzF8fHJlc3RhdXJhbnR8ZW58MHx8MHx8fDA%3D');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.blurred-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;  /* 讓它繼承背景 */
+  filter: blur(5px); /* 模糊背景 */
+  z-index: 0;  /* 確保不影響內部內容 */
+}
+
+.blurred-bg > .container {
+  position: relative;
+  z-index: 1; /* 讓內容正常顯示，不被模糊 */
+}
+
+.footer-bg {
+  position: relative;
+  background-image: url('https://images.unsplash.com/photo-1513185158878-8d8c2a2a3da3?q=80&w=1024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.footer-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;  /* 讓它繼承背景 */
+  filter: blur(5px); /* 模糊背景 */
+  z-index: 0;  /* 確保不影響內部內容 */
+}
+
+.footer-bg > .container {
+  position: relative;
+  z-index: 1; /* 讓內容正常顯示，不被模糊 */
+}
+
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px; /* 讓內陰影邊角圓滑 */
+  box-shadow: inset 0px 10px 30px rgba(0, 0, 0, 0.5); /* 內陰影 */
+}
+
+.image-wrapper img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.05); /* 讓圖片 hover 時微微放大 */
+}
+
+.map-container {
+  width: 100%;
+  max-width: 100%;
+  height: 430px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 /* 桌機 & 手機切換 */
 .webValue {
   display: inline;
@@ -271,9 +438,15 @@ thead {
   .logout {
     width: 100%;
   }
+
+  .arrow-btn3 {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
 }
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 990px) {
   .modalImgWrap img {
     height: 250px;
   }
@@ -292,6 +465,36 @@ thead {
   .right {
     right: 20px;
   }
+
+  .textLeft {
+    margin-left: -10%;
+    transition: margin-left 0.3s ease-in-out;
+  }
+  
+  .textRight {
+    margin-left: 10%;
+    transition: margin-left 0.3s ease-in-out;
+  }
+  
+  /* Hover 時滑動效果 */
+  .textLeft:hover {
+    margin-left: -13%;
+  }
+  
+  .textRight:hover {
+    margin-left: 13%;
+  }
+
+  .star-container {
+    top: -7px;  /* 向上 */
+    right: 0px; /* 向右 */
+    padding: 0.3rem;
+  }
+
+  .star-icon {
+      font-size: 0.9rem; /* 縮小 */
+  }
+  
 }
 
 /* 桌機版分類欄 */
@@ -316,6 +519,10 @@ thead {
 
 /* 手機版分類欄 */
 @media (max-width: 767px) {
+  .site-title{
+    font-size: 16px;
+  }
+
   .category-list {
     position: fixed;
     top: 80px;
@@ -339,5 +546,19 @@ thead {
   .category-list .list-group-item {
     flex: 0 0 auto;
     padding: 10px 15px;
+  }
+
+  .textLeft, .textRight {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .textLeft:hover, .textRight:hover {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .map-container {
+    height: 300px;
   }
 }

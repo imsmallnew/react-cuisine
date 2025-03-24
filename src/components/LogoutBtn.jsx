@@ -1,10 +1,13 @@
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
 import axios from 'axios';
 import { pushMessage } from '../redux/toastSlice';
 import { showLoading, hideLoading } from "../redux/loadingSlice";
 
-export default function LogoutBtn() {
+export default function LogoutBtn({
+    menuOpen
+}) {
     const API_URL = import.meta.env.VITE_BASE_URL;
 
     const navigate = useNavigate();
@@ -38,8 +41,13 @@ export default function LogoutBtn() {
     return (
         <>
             <div className="nav-item">
-                <button className="btn btn-sm btn-outline-secondary" type="button" id="logoutBtn" onClick={handleLogout}>登出後台</button>
+                <button className={`btn ${menuOpen ? "btn-lg" : "btn-sm"} btn-outline-secondary`} type="button" id="logoutBtn" onClick={handleLogout}>登出後台</button>
             </div>
         </>
     )
+}
+
+// 定義PropTypes
+LogoutBtn.propTypes = {
+    menuOpen: PropTypes.bool.isRequired,
 }

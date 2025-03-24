@@ -177,6 +177,7 @@ export default function Cart() {
           minHeight: "100vh",
           paddingTop: '60px',
           position: "relative",
+          paddingBottom: '40px',
         }}
       >
         {/* 背景遮罩 */}
@@ -191,14 +192,11 @@ export default function Cart() {
             zIndex: 1,
           }}
         ></div>
-
-        <div className="container position-relative pb-5" style={{ zIndex: 2 }}>
+        <div className="container position-relative pb-3 bg-white rounded-3 mt-5" style={{ zIndex: 2, }}>
           <div className="mt-4">
-            <div className="table-responsive">
-              {cartList?.carts?.length === 0 && <div className="text-center">
-                <span className="badge bg-warning p-2 pe-3 ps-3 text-dark fs-6 mt-2 lh-base">[溫馨提示]: 購物車目前為空！<br className='mobileValue'/>請至 <Link className='text-danger text-decoration-none' to={'/products'}>商品列表</Link> 挑選你想吃的唷 ( *´ސު｀*)</span>
-              </div>}
-              <table className="table mt-3 table-hover text-dark bg-light rounded-3 overflow-hidden shadow-sm">
+            {/* 桌機版：維持 Table 格式 */}
+            <div className="table-responsive d-none d-md-block">
+              <table className="table mt-3 table-hover text-dark bg-light overflow-hidden">
                 <thead className="table-warning text-dark">
                   <tr className="text-center">
                     <th style={{ width: '120px' }}>圖片</th>
@@ -214,32 +212,19 @@ export default function Cart() {
                   {cartList?.carts?.map((cartItem) => (
                     <tr key={cartItem?.id} className="align-middle text-center">
                       <td className="text-start">
-                        <img
-                          src={cartItem?.product?.imageUrl}
-                          className="rounded border border-gold"
-                          alt="主圖"
-                          width="100"
-                        />
+                        <img src={cartItem?.product?.imageUrl} className="rounded border border-gold" alt="主圖" width="100" />
                       </td>
                       <td className="text-center"><h5>{cartItem?.product?.title}</h5></td>
                       <td><span className="badge bg-danger">{cartItem?.product?.category}</span></td>
                       <td>
                         <div className="btn-group" role="group">
-                          <button
-                            type="button"
-                            disabled={cartItem?.qty === 1 || isLoading}
-                            className="btn btn-outline-dark btn-sm"
-                            onClick={() => updateCartItem(cartItem, cartItem?.qty - 1)}
-                          >-</button>
+                          <button type="button" disabled={cartItem?.qty === 1 || isLoading} className="btn btn-outline-dark btn-sm"
+                            onClick={() => updateCartItem(cartItem, cartItem?.qty - 1)}>−</button>
                           <span className="btn border border-secondary bg-white text-dark" style={{ width: "50px", cursor: "auto" }}>
                             {cartItem.qty}
                           </span>
-                          <button
-                            type="button"
-                            disabled={isLoading}
-                            className="btn btn-outline-dark btn-sm"
-                            onClick={() => updateCartItem(cartItem, cartItem?.qty + 1)}
-                          >+</button>
+                          <button type="button" disabled={isLoading} className="btn btn-outline-dark btn-sm"
+                            onClick={() => updateCartItem(cartItem, cartItem?.qty + 1)}>+</button>
                         </div>
                       </td>
                       <td className="text-dark fw-bold">{cartItem?.product?.price} 元</td>
@@ -252,28 +237,76 @@ export default function Cart() {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan="6" className="text-end fs-5">總計</td>
-                    <td className="text-end text-danger fs-4 fw-bold pe-5">{cartList?.total} 元</td>
-                  </tr>
-                  <tr>
-                    <td colSpan="6" className="text-end fs-5">折扣價</td>
-                    <td className="text-end text-success fs-4 fw-bold pe-5">{cartList?.final_total} 元</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
 
+            {/* 手機版：改用卡片呈現 */}
+            <div className="d-md-none pt-3">
+              {cartList?.carts?.map((cartItem) => (
+                <div key={cartItem?.id} className="card mb-3 shadow-sm">
+                  <div className="row g-0 align-items-center">
+                    <div className="col-6 p-2">
+                      <img src={cartItem?.product?.imageUrl} className="img-fluid rounded border border-gold" alt="主圖" />
+                    </div>
+                    <div className="col-6">
+                      <div className="card-body p-2">
+                        <h6 className="card-title">{cartItem?.product?.title}</h6>
+                        <p className="mb-1"><span className="badge bg-danger">{cartItem?.product?.category}</span></p>
+                        <p className="mb-1 text-dark fw-bold">單價：{cartItem?.product?.price} 元</p>
+                        <p className="mb-1 text-dark fw-bold">小計：{cartItem?.total} 元</p>
+
+                        {/* 訂購數量 */}
+                        <div className="btn-group btn-group-sm mt-1" role="group">
+                          <button type="button" disabled={cartItem?.qty === 1 || isLoading} className="btn btn-outline-dark"
+                            onClick={() => updateCartItem(cartItem, cartItem?.qty - 1)}>−</button>
+                          <span className="btn border border-secondary bg-white text-dark" style={{ width: "40px", cursor: "auto" }}>
+                            {cartItem.qty}
+                          </span>
+                          <button type="button" disabled={isLoading} className="btn btn-outline-dark"
+                            onClick={() => updateCartItem(cartItem, cartItem?.qty + 1)}>+</button>
+                        </div>
+
+                        {/* 刪除按鈕 */}
+                        <button type="button" className="btn btn-danger btn-sm mt-1 ms-2" onClick={() => openDeleteModal(cartItem)}>
+                          <i className="fas fa-trash-alt"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 總計資訊 */}
+            <div className="text-end bg-white rounded-3 p-3">
+              <h5 className="text-dark">總計：<span className="text-danger fw-bold">{cartList?.total} 元</span></h5>
+              <h5 className="text-dark">折扣價：<span className="text-success fw-bold">{cartList?.final_total} 元</span></h5>
+            </div>
+
             {/* 按鈕區塊 */}
-            <div className="text-end mt-2">
-              <Link className="btn btn-dark me-2 px-4 py-2" to={'/products'}>繼續購物</Link>
-              {cartList?.carts?.length !== 0 && (
-                <button className="btn btn-danger me-2 px-4 py-2" type="button" onClick={() => openDeleteModal({})}>
-                  清空購物車
-                </button>
-              )}
-              {cartList?.carts?.length !== 0 && <Link className="btn btn-dark px-4 py-2" to={'/form'}>結帳表單</Link>}
+            <div className="container">
+              <div className="row g-2 mt-2 justify-content-end text-center text-md-end">
+                {cartList?.carts?.length !== 0 && (
+                  <div className="col-12 col-md-3">
+                    <button className="btn btn-outline-danger w-100 px-4 py-2" type="button" onClick={() => openDeleteModal({})}>
+                      <span>清空購物車</span>
+                    </button>
+                  </div>
+                )}
+                <div className="col-12 col-md-3">
+                  <Link className="btn btn-dark btn-hover w-100 px-4 py-2" to={'/products'}>
+                    <span>繼續購物</span>
+                  </Link>
+                </div>
+
+                {cartList?.carts?.length !== 0 && (
+                  <div className="col-12 col-md-3">
+                    <Link className="btn btn-dark btn-hover w-100 px-4 py-2" to={'/form'}>
+                      <span>結帳表單</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
