@@ -1,8 +1,8 @@
 import { Provider } from 'react-redux';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // 引入 Bootstrap CSS
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // 引入 Bootstrap JS
-import '@fortawesome/fontawesome-free/css/all.min.css'; // 引入 FontAwesome 圖標庫
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css'; // 引入自定義樣式
 
 import routes from './routes/index.jsx';

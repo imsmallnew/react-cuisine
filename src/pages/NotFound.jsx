@@ -6,8 +6,8 @@ export default function NotFound() {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigate("/"); // 3 秒後導航到首頁
-        }, 3000);
+            navigate("/"); // 5 秒後導航到首頁
+        }, 5000);
 
         return () => clearTimeout(timer);
     }, [navigate]);
@@ -27,7 +27,7 @@ export default function NotFound() {
                 />
 
                 <div className="position-relative d-flex flex-column align-items-center justify-content-center vh-100 text-center px-4">
-                    <h1 className="display-3 fw-bold text-shadow"> Page not found </h1>
+                    <h1 className="display-3 fw-bold text-shadow"> 此頁面不存在 </h1>
                     <p className="mt-3 fs-4 w-50 text-shadow" >
                         您是否在美食的道路上迷失方向?<br /> 即將為您給予最好的建議...
                     </p>

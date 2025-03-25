@@ -143,7 +143,7 @@ export default function AdminOrders() {
       setState(false)
     }, 500)
     if (orderModalInstanceRef.current) {
-      orderModalInstanceRef.current.show(); // 確保 Modal 實例已初始化後調用 show()
+      orderModalInstanceRef.current.show();
     } else {
       console.error("Modal instance is not initialized.");
     }
@@ -152,7 +152,7 @@ export default function AdminOrders() {
   // 關閉 OrderModal
   const closeOrderModal = () => {
     if (orderModalInstanceRef.current) {
-      orderModalInstanceRef.current.hide(); // 確保 Modal 實例已初始化後調用 hide()
+      orderModalInstanceRef.current.hide();
       setTimeout(() => {
         setTargetOrder({})
       }, 500)

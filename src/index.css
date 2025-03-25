@@ -47,7 +47,7 @@ input[type="checkbox"] {
 .btn-hover {
   position: relative;
   overflow: hidden;
-  z-index: 1; /* 確保內容在最上層 */
+  z-index: 1;
 }
 
 .btn-hover:before,
@@ -294,6 +294,10 @@ thead {
   font-weight: bold;
 }
 
+.logo-type{
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+}
 
 .textLeft {
   margin-left: -13%;
@@ -321,7 +325,7 @@ thead {
 }
 
 .star-icon {
-  font-size: 1.25rem; /* 標準大小 */
+  font-size: 1.25rem;
 }
 
 .blurred-bg {
@@ -339,14 +343,14 @@ thead {
   left: 0;
   width: 100%;
   height: 100%;
-  background: inherit;  /* 讓它繼承背景 */
-  filter: blur(5px); /* 模糊背景 */
-  z-index: 0;  /* 確保不影響內部內容 */
+  background: inherit;
+  filter: blur(5px);
+  z-index: 0;
 }
 
-.blurred-bg > .container {
+.blurred-bg>.container {
   position: relative;
-  z-index: 1; /* 讓內容正常顯示，不被模糊 */
+  z-index: 1;
 }
 
 .footer-bg {
@@ -364,21 +368,21 @@ thead {
   left: 0;
   width: 100%;
   height: 100%;
-  background: inherit;  /* 讓它繼承背景 */
-  filter: blur(5px); /* 模糊背景 */
-  z-index: 0;  /* 確保不影響內部內容 */
+  background: inherit;
+  filter: blur(5px);
+  z-index: 0;
 }
 
-.footer-bg > .container {
+.footer-bg>.container {
   position: relative;
-  z-index: 1; /* 讓內容正常顯示，不被模糊 */
+  z-index: 1;
 }
 
 .image-wrapper {
   position: relative;
   overflow: hidden;
-  border-radius: 16px; /* 讓內陰影邊角圓滑 */
-  box-shadow: inset 0px 10px 30px rgba(0, 0, 0, 0.5); /* 內陰影 */
+  border-radius: 16px;
+  box-shadow: inset 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .image-wrapper img {
@@ -389,7 +393,7 @@ thead {
 }
 
 .image-wrapper:hover img {
-  transform: scale(1.05); /* 讓圖片 hover 時微微放大 */
+  transform: scale(1.05);
 }
 
 .map-container {
@@ -470,31 +474,30 @@ thead {
     margin-left: -10%;
     transition: margin-left 0.3s ease-in-out;
   }
-  
+
   .textRight {
     margin-left: 10%;
     transition: margin-left 0.3s ease-in-out;
   }
-  
-  /* Hover 時滑動效果 */
+
   .textLeft:hover {
     margin-left: -13%;
   }
-  
+
   .textRight:hover {
     margin-left: 13%;
   }
 
   .star-container {
-    top: -7px;  /* 向上 */
-    right: 0px; /* 向右 */
+    top: -7px;
+    right: 0px;
     padding: 0.3rem;
   }
 
   .star-icon {
-      font-size: 0.9rem; /* 縮小 */
+    font-size: 0.9rem;
   }
-  
+
 }
 
 /* 桌機版分類欄 */
@@ -519,7 +522,7 @@ thead {
 
 /* 手機版分類欄 */
 @media (max-width: 767px) {
-  .site-title{
+  .site-title {
     font-size: 16px;
   }
 
@@ -548,12 +551,14 @@ thead {
     padding: 10px 15px;
   }
 
-  .textLeft, .textRight {
+  .textLeft,
+  .textRight {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
 
-  .textLeft:hover, .textRight:hover {
+  .textLeft:hover,
+  .textRight:hover {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }

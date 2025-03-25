@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
+import ScrollToTop from '../components/ScrollToTop';
 import { getCartList } from '../redux/cartSlice';
 import logo from '../assets/logo.png';
 
@@ -38,7 +39,7 @@ export default function FrontLayout() {
             <nav className="navbar navbar-light navbar-expand-lg fixed-top shadow">
                 <div className="container">
                     <Link className="navbar-brand site-title" to={`/`}>
-                        <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger
+                        <img src={logo}  style={{ width: 50, marginRight: '5px' }} alt="Logo" /> Daniel&apos;s Burger
                     </Link>
 
                     {/* 漢堡選單按鈕 (手機版) */}
@@ -85,15 +86,29 @@ export default function FrontLayout() {
             <Outlet />
 
             {/* 頁尾 */}
-            {!isLoading && <footer className="footer bg-dark w-100" style={{ position: "relative", bottom: 0, left: 0, zIndex: 100, }}>
-                <div className="container">
-                    <div className="d-flex align-items-center justify-content-center text-white py-2">
-                        <p className="mb-0 text-center">
-                            &copy; 2024 - Daniel&apos;s Burger All Rights Reserved.
+            {!isLoading && <footer
+                    className="footer bg-dark w-100"
+                    style={{ position: "relative", bottom: 0, left: 0, zIndex: 100 }}
+                    >
+                    <div className="container">
+                        <div className="d-flex align-items-center justify-content-center text-white py-2">
+                        {/* 桌面版 (顯示單行) */}
+                        <p className="mb-0 text-center d-none d-md-block">
+                            &copy; 2025 - Daniel&apos;s Burger All Rights Reserved.
                         </p>
+
+                        {/* 手機版 (顯示分行) */}
+                        <p className="mb-0 text-center d-md-none">
+                            &copy; 2025 <br />
+                            Daniel&apos;s Burger All Rights Reserved.
+                        </p>
+                        </div>
                     </div>
-                </div>
-            </footer>}
+                </footer>
+            }
+
+            {/* 置頂按鈕 */}
+            <ScrollToTop />
         </>
     )
 }

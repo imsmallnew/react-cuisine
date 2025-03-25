@@ -24,14 +24,14 @@ export default function ProductsList() {
   const filteredProducts = selectedCategory
     ? clientProductList?.filter(item => item.category === selectedCategory)
     : clientProductList;
-  
-    useEffect(() => {
-      const searchParams = new URLSearchParams(location.search);
-      const categoryFromUrl = searchParams.get("category");
 
-      if (categoryFromUrl) {
-          setSelectedCategory(categoryFromUrl);
-      }
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const categoryFromUrl = searchParams.get("category");
+
+    if (categoryFromUrl) {
+      setSelectedCategory(categoryFromUrl);
+    }
   }, [location.search, setSelectedCategory]);
 
   // 取得客戶商品資料
@@ -107,19 +107,19 @@ export default function ProductsList() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.2)", // 半透明遮罩
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
             zIndex: 1,
           }}
         ></div>
 
         <div className="row">
+          
           {/* 左側固定分類欄 */}
-
           <div className="d-flex flex-md-column flex-row col-12 col-md-2 d-md-block category-list">
             <ul className="list-group list-group-horizontal-md list-group-flush flex-md-column flex-row w-100 text-center">
               {/* 全部商品按鈕 */}
               <motion.li
-                className={`list-group-item ${selectedCategory === null ? "active bg-warning text-dark" : ""}`}
+                className={`d-none d-md-block list-group-item ${selectedCategory === null ? "active bg-warning text-dark" : ""}`}
                 onClick={() => setSelectedCategory(null)}
                 style={{
                   cursor: "pointer",
@@ -134,11 +134,11 @@ export default function ProductsList() {
                 全部商品
               </motion.li>
 
-              {/* 動態分類按鈕 (逐漸顯示) */}
+              {/* 動態分類按鈕 */}
               {[...new Set(clientProductList?.map((item) => item.category))].map((category, index) => (
                 <motion.li
                   key={category}
-                  className={`list-group-item ${selectedCategory === category ? "active bg-warning text-dark" : ""}`}
+                  className={`list-group-item ${selectedCategory === category ? "active bg-warning text-dark" : ""} py-1 py-md-2`}
                   onClick={() => setSelectedCategory(category)}
                   style={{
                     cursor: "pointer",
@@ -148,7 +148,7 @@ export default function ProductsList() {
                   }}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }} // 依序出現
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
                   {category}
                 </motion.li>
@@ -157,7 +157,7 @@ export default function ProductsList() {
           </div>
 
           {/* 右側商品列表 */}
-          <div className="col-12 col-md-10 offset-md-2 ps-4 pe-4 mt-md-0 mt-5 pt-3" style={{ zIndex: 10 }}>
+          <div className="col-12 col-md-10 offset-md-2 px-2 mt-md-0 mt-5 pt-3" style={{ zIndex: 10 }}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedCategory} // 每次分類變更，觸發動畫
@@ -174,7 +174,7 @@ export default function ProductsList() {
                       whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.3 }}
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)", // 玻璃霧化效果
+                        background: "rgba(255, 255, 255, 0.1)",
                         backdropFilter: "blur(10px)",
                         boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
                         borderRadius: "10px",
@@ -218,7 +218,7 @@ export default function ProductsList() {
                       </div>
 
                       {/* 商品詳情 / 加到購物車 */}
-                      <div className="card-footer d-flex">
+                      <div className="card-footer d-flex px-0">
                         <Link
                           className="btn btn-outline-light w-50 d-flex justify-content-center align-items-center"
                           to={`/products/${item.id}`}
@@ -231,7 +231,6 @@ export default function ProductsList() {
                           onClick={() => addCartItem(item, 1)}
                           disabled={cartItem && state && item.id === cartItem.id}
                         >
-
                           <div className="d-flex align-items-center">{cartItem && state && item.id === cartItem.id ? (
                             <ReactLoading type="spin" color="#FFD700" height="1rem" width="1rem" className="d-flex" />
                           ) : (
@@ -244,7 +243,6 @@ export default function ProductsList() {
                     </motion.div>
                   </div>
                 ))}
-
               </motion.div>
             </AnimatePresence>
           </div>

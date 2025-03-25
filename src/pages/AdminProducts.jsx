@@ -69,7 +69,6 @@ export default function AdminProducts() {
     try {
       await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/products?page=${page}`)
         .then((res) => {
-          // 因API建立商品是最先建的num數字在後面,可重新排序顯示.sort((a, b) => b.num - a.num)
           let data = res.data.products;
           setProductList(data) // 商品資料
           getAllProducts();
@@ -138,7 +137,6 @@ export default function AdminProducts() {
     navigate(`/admin/products/${newPage}`, { replace: true });
   };
 
-  
   // 新增商品資料
   const createProduct = async () => {
     dispatch(showLoading("新增商品資料中..."));
@@ -158,8 +156,8 @@ export default function AdminProducts() {
         text: "商品名稱:" + tempProduct.title,
         status: "success"
       }))
-      getProducts(); // 重新取得商品清單
-      closeProductModal(); // 關閉Modal
+      getProducts();
+      closeProductModal();
     } catch (error) {
       console.error(error)
       dispatch(pushMessage({
@@ -194,8 +192,8 @@ export default function AdminProducts() {
           status: "success"
         }))
       }
-      getProducts(); // 重新取得商品清單
-      closeProductModal(); // 關閉Modal
+      getProducts();
+      closeProductModal();
     } catch (error) {
       console.error(error)
       if (modalElement?.classList.contains("show")) {
@@ -393,7 +391,7 @@ export default function AdminProducts() {
       setState(false)
     }, 500)
     if (productModalInstanceRef.current) {
-      productModalInstanceRef.current.show(); // 確保 Modal 實例已初始化後調用 show()
+      productModalInstanceRef.current.show();
     } else {
       console.error("Modal instance is not initialized.");
     }
@@ -402,7 +400,7 @@ export default function AdminProducts() {
   // 關閉 ProductModal
   const closeProductModal = () => {
     if (productModalInstanceRef.current) {
-      productModalInstanceRef.current.hide(); // 確保 Modal 實例已初始化後調用 hide()
+      productModalInstanceRef.current.hide();
     } else {
       console.error("Modal instance is not initialized.");
     }
@@ -415,7 +413,7 @@ export default function AdminProducts() {
       setState(false)
     }, 500)
     if (deleteModalInstanceRef.current) {
-      deleteModalInstanceRef.current.show(); // 確保 Modal 實例已初始化後調用 show()
+      deleteModalInstanceRef.current.show();
     } else {
       console.error("Modal instance is not initialized.");
     }
@@ -424,7 +422,7 @@ export default function AdminProducts() {
   // 關閉 DeleteModal
   const closeDeleteModal = () => {
     if (deleteModalInstanceRef.current) {
-      deleteModalInstanceRef.current.hide(); // 確保 Modal 實例已初始化後調用 hide()
+      deleteModalInstanceRef.current.hide();
     } else {
       console.error("Modal instance is not initialized.");
     }

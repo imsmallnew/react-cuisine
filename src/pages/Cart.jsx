@@ -45,7 +45,7 @@ export default function Cart() {
   const openDeleteModal = (item) => {
     setCartItem(item);
     if (deleteModalInstanceRef.current) {
-      deleteModalInstanceRef.current.show(); // 確保 Modal 實例已初始化後調用 show()
+      deleteModalInstanceRef.current.show();
     } else {
       console.error("Modal instance is not initialized.");
     }
@@ -54,7 +54,7 @@ export default function Cart() {
   // 關閉 DeleteModal
   const closeDeleteModal = () => {
     if (deleteModalInstanceRef.current) {
-      deleteModalInstanceRef.current.hide(); // 確保 Modal 實例已初始化後調用 hide()
+      deleteModalInstanceRef.current.hide();
     } else {
       console.error("Modal instance is not initialized.");
     }
@@ -193,7 +193,10 @@ export default function Cart() {
           }}
         ></div>
         <div className="container position-relative pb-3 bg-white rounded-3 mt-5" style={{ zIndex: 2, }}>
-          <div className="mt-4">
+        	<div className="mt-4">
+			{cartList?.carts?.length === 0 && <div className="text-center">
+                <span className="badge p-2 pe-3 ps-3 text-dark fs-6 mt-2 lh-base w-100">[溫馨提示]: 購物車目前為空！<br className='mobileValue'/>請至 <Link className='text-dark text-decoration-none' to={'/products'}><span className="badge bg-danger">商品列表</span></Link> 挑選你想吃的唷 ( *´ސު｀*)</span>
+            </div>}
             {/* 桌機版：維持 Table 格式 */}
             <div className="table-responsive d-none d-md-block">
               <table className="table mt-3 table-hover text-dark bg-light overflow-hidden">
@@ -278,7 +281,7 @@ export default function Cart() {
             </div>
 
             {/* 總計資訊 */}
-            <div className="text-end bg-white rounded-3 p-3">
+            <div className="text-end bg-white rounded-3 p-3 d-none">
               <h5 className="text-dark">總計：<span className="text-danger fw-bold">{cartList?.total} 元</span></h5>
               <h5 className="text-dark">折扣價：<span className="text-success fw-bold">{cartList?.final_total} 元</span></h5>
             </div>

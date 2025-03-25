@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaStar } from "react-icons/fa";
 import logo from '../assets/logo.png';
 
@@ -11,7 +11,6 @@ export default function Home() {
     const navigate = useNavigate();
     const promoSectionRef = useRef(null);
     const portfolioSectionRef = useRef(null);
-    const [isVisible, setIsVisible] = useState(false);
     const { scrollYProgress, scrollY } = useScroll();
     const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
     const textY = useTransform(scrollYProgress, [0, 0.5], [0, -50]);
@@ -40,24 +39,6 @@ export default function Home() {
         };
     }, []);
 
-    // 監聽滾動事件
-    const toggleVisibility = useCallback(() => {
-        if (window.scrollY > 100) {
-            setIsVisible(true); // 當滾動超過 100px，顯示按鈕
-        } else {
-            setIsVisible(false); // 置頂時隱藏按鈕
-        }
-    }, []);
-    // const toggleVisibility = useCallback(() => {
-    //     setIsVisible(window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10);
-    // }, []);
-
-    useEffect(() => {
-        window.addEventListener("scroll", toggleVisibility);
-        return () => window.removeEventListener("scroll", toggleVisibility);
-    }, [toggleVisibility]);
-
-
     const scrollTo = (target) => {
         if (target === "promo" && promoSectionRef.current) {
             promoSectionRef.current.scrollIntoView({ behavior: "smooth" });
@@ -67,6 +48,10 @@ export default function Home() {
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
+
+    useEffect(() => {
+        scrollTo(); // 網頁載入時滾動到頂部
+    }, []);
 
     // Portfolio 資料
     const portfolioItems = [
@@ -84,7 +69,7 @@ export default function Home() {
                 const feedbacks = [
                     "餐點很好吃，環境很棒！",
                     "服務非常好，推薦大家來試試。",
-                    "甜點超好吃，CP 值超高！",
+                    "甜點超好吃， CP 值超高！",
                     "氣氛很好，適合約會或聚餐。",
                     "主餐份量十足，味道也很棒。",
                     "飲品種類多元，手工特調推薦！",
@@ -123,6 +108,7 @@ export default function Home() {
         }
     }, [isHovered]);
 
+    // 點分類時導向到商品頁
     const handleCategoryClick = (category) => {
         navigate(`/products?category=${encodeURIComponent(category)}`);
     };
@@ -142,7 +128,6 @@ export default function Home() {
                     }}
                 />
 
-                {/* Content Section */}
                 <div className="position-relative d-flex flex-column align-items-center justify-content-center vh-100 text-center px-4">
                     <motion.h2
                         initial={{ y: -100, opacity: 0 }}
@@ -157,14 +142,14 @@ export default function Home() {
                         initial={{ y: -100, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="display-3 fw-bold text-shadow"
+                        className="logo-type display-3 fw-bold text-shadow"
                         style={{ opacity: textOpacity, transform: `translateY(${textY}px)` }}
                     >
                         Daniel&apos;s Burger
                     </motion.h1>
 
                     <motion.p
-                        className="mt-3 fs-4 w-75 text-shadow"
+                        className="mt-3 fs-4 fw-bold w-75 text-shadow"
                         style={{ opacity: textOpacity, transform: `translateY(${textY}px)` }}
                     >
                         在正宗的美式氛圍中享用最美味的漢堡、香脆薯條和手工蛋糕！
@@ -178,12 +163,6 @@ export default function Home() {
                             whileInView={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.8 }}
                         >
-                            {/* <Link
-                                to={"products"}
-                                className="arrow-btn text-shadow"
-                            >
-                                開始點餐 <i className="fa fa-cutlery"></i>
-                            </Link> */}
                             <button className="arrow-btn text-shadow" onClick={() => scrollTo("portfolio")}>
                                 開始點餐 <i className="fa fa-cutlery"></i>
                             </button>
@@ -216,7 +195,7 @@ export default function Home() {
                                 transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
                             >
-                                {/* 桌機版圖片區塊 */}
+                                {/* 桌機版圖片區塊 (手機板不顯示) */}
                                 <motion.div
                                     className="col-md-6 position-relative d-none d-md-block mt-3"
                                     whileHover={{ scale: 1.05 }}
@@ -227,7 +206,7 @@ export default function Home() {
                                     </div>
                                 </motion.div>
 
-                                {/* 文字區塊 - 桌機版*/}
+                                {/* 文字區塊 - 桌機版 */}
                                 <motion.div
                                     className="col-md-6 position-relative"
                                     initial={{ opacity: 0, x: index % 2 === 0 ? 100 : -100 }}
@@ -273,7 +252,6 @@ export default function Home() {
                 <div className="container-fluid py-5 position-relative ">
                     <div className="container my-5 px-5">
                         <h2 className="text-center pb-4 display-5 fw-bold">聽顧客怎麼說</h2>
-
                         <div className="position-relative">
                             <AnimatePresence mode="wait">
                                 <motion.div
@@ -284,7 +262,7 @@ export default function Home() {
                                     transition={{ duration: 0.8 }}
                                 >
                                     <div className="row justify-content-center mt-4">
-                                        {comments.slice(activeIndex * 6, activeIndex * 6 + 6).map((member, index) => (
+                                        {comments.slice(activeIndex * 6, activeIndex * 6 + 6).map((member) => (
                                             <div
                                                 key={member.id}
                                                 className="col-md-6 mb-4"
@@ -293,8 +271,8 @@ export default function Home() {
                                             >
                                                 <motion.div
                                                     className="card p-3 shadow-sm d-flex flex-row align-items-center position-relative"
-                                                    initial={{ scale: 0.95, opacity: 0 }} // 每個卡片從上方進入並逐漸變得可見
-                                                    whileInView={{ scale: 1.02, opacity: 1 }} // 滾動到視圖時卡片顯示
+                                                    initial={{ scale: 0.95, opacity: 0 }}
+                                                    whileInView={{ scale: 1.02, opacity: 1 }}
                                                     transition={{ duration: 0.3, delay: member.id * 0.2 }}
                                                 >
                                                     {/* 星星評價 (右上角) */}
@@ -304,18 +282,18 @@ export default function Home() {
                                                         ))}
                                                     </div>
 
-                                                    {/* 顧客圖片 (左側，增加外框與陰影) */}
+                                                    {/* 顧客圖片 */}
                                                     <img
-                                                        src={member.img}
+                                                        src={member?.img}
                                                         className="rounded-circle me-3 border border-2 shadow"
-                                                        alt={member.name}
+                                                        alt={member?.name}
                                                         style={{ width: "80px", height: "80px", flexShrink: 0 }}
                                                     />
 
-                                                    {/* 顧客姓名與評論 (右側) */}
+                                                    {/* 顧客姓名與評論 */}
                                                     <div>
-                                                        <h5 className="mb-1">{member.name}</h5>
-                                                        <p className="mb-0 text-muted">{member.comment}</p>
+                                                        <h5 className="mb-1">{member?.name}</h5>
+                                                        <p className="mb-0 text-muted">{member?.comment}</p>
                                                     </div>
                                                 </motion.div>
                                             </div>
@@ -349,35 +327,35 @@ export default function Home() {
                             打卡好禮三選一
                         </motion.h2>
                         <motion.p
-                            className="fs-5 text-shadow"
+                            className="fs-5 fw-bold text-shadow"
                             initial={{ x: 100, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
                             transition={{ duration: 0.4 }}
                         >
-                            出示Google五星評論的顧客, 我們將給予您以下神秘優惠！
+                            出示Google五星評論的顧客, 我們將給予您以下優惠！
                         </motion.p>
                         <div className="row justify-content-center mt-4">
                             {event.map((item, index) => (
                                 <motion.div
                                     key={index}
                                     className="col-md-4 col-12 mb-4"
-                                    initial={{ y: -100, opacity: 0 }} // 初始位置在上方並且不可見
-                                    whileInView={{ y: 0, opacity: 1 }} // 滾動到視圖中時，移動到正常位置並顯示
-                                    transition={{ duration: 0.8 }} // 動畫持續時間
+                                    initial={{ y: -100, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    transition={{ duration: 0.8 }}
                                 >
                                     <motion.div
                                         className="card p-3 shadow-sm d-flex align-items-center position-relative"
                                         key={index}
-                                        initial={{ y: -50, opacity: 0 }} // 每個卡片從上方進入並逐漸變得可見
-                                        whileInView={{ y: 0, opacity: 1 }} // 滾動到視圖時卡片顯示
-                                        transition={{ duration: 0.5, delay: index * 0.2 }} // 每個卡片延遲進場
+                                        initial={{ y: -50, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1 }}
+                                        transition={{ duration: 0.5, delay: index * 0.2 }}
                                     >
 
                                         <motion.div
                                             className="card-img-container"
                                             style={{
                                                 overflow: "hidden",  // 限制圖片超出範圍
-                                                borderRadius: "5px" // 讓邊角不變形
+                                                borderRadius: "5px"
                                             }}
                                         >
                                             <motion.img
@@ -385,7 +363,7 @@ export default function Home() {
                                                 className="card-img-top"
                                                 style={{ height: '180px', objectFit: 'cover', width: "100%" }}
                                                 alt={item.title}
-                                                whileHover={{ scale: 1.2 }}  // 內部放大
+                                                whileHover={{ scale: 1.2 }}
                                                 transition={{ duration: 0.3 }}
                                             />
                                         </motion.div>
@@ -398,13 +376,6 @@ export default function Home() {
                                 </motion.div>
                             ))}
                         </div>
-                        <button
-                            onClick={() => scrollTo("TOP")}
-                            className={`scroll-to-top ${isVisible && "visible"}`}
-                            aria-label="Scroll to top"
-                        >
-                            <div className="arrow"></div>
-                        </button>
                     </div>
                 </div>
 
@@ -444,13 +415,13 @@ export default function Home() {
                             {/* 右側 - 餐廳資訊 */}
                             <div className="col-12 col-md-4">
                                 <div className="info-box p-4 text-dark rounded text-center text-md-start mx-auto px-0" style={{ maxWidth: "350px" }}>
-                                    <h3 className="fw-bold text-dark mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
+                                    <h3 className="logo-type fw-bold text-dark mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
                                         <img src={logo} style={{ width: 50, marginRight: '10px' }} alt="Logo" />
                                         Daniel&apos;s Burger
                                     </h3>
-                                    <p className="mb-2"><strong>地址：</strong> 台北市北投區大業路136號</p>
-                                    <p className="mb-2"><strong>Email：</strong> imsmallnew@gmail.com</p>
-                                    <p className="mb-2"><strong>電話：</strong> 02 2898 1999</p>
+                                    <p className="mb-2"><strong>地址: </strong> 台北市北投區大業路136號</p>
+                                    <p className="mb-2"><strong>Email: </strong> imsmallnew@gmail.com</p>
+                                    <p className="mb-2"><strong>電話: </strong> 02 2898 1999</p>
                                 </div>
                             </div>
                         </div>

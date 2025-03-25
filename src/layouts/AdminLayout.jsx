@@ -4,6 +4,7 @@ import { useState } from 'react';
 import LogoutBtn from '../components/LogoutBtn';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
+import ScrollToTop from '../components/ScrollToTop';
 import logo from '../assets/logo.png';
 
 export default function AdminLayout() {
@@ -31,7 +32,7 @@ export default function AdminLayout() {
             <nav className="navbar navbar-light navbar-expand-lg text-primary fixed-top shadow bg-dark" data-bs-theme="dark">
                 <div className="container">
                     <Link className="navbar-brand site-title" to={`/admin`}>
-                        <img src={logo}  style={{ width: 50, marginRight: '5px' }} /> Daniel&apos;s Burger Admin
+                        <img src={logo}  style={{ width: 50, marginRight: '5px' }} alt="Logo" /> Daniel&apos;s Burger Admin
                     </Link>
 
                     {/* 漢堡選單按鈕 (手機版) */}
@@ -75,6 +76,9 @@ export default function AdminLayout() {
 
             {/* 內容 */}
             <Outlet />
+
+            {/* 置頂按鈕 */}
+            <ScrollToTop />
         </>
     )
 }

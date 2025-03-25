@@ -193,7 +193,6 @@ export default function ProductDetail() {
                                     </div>
                                 </div>
 
-
                                 {/* 產品內容 */}
                                 <div className="col-md-8">
                                     <div className="card-body text-white px-md-3 px-0">
@@ -229,7 +228,7 @@ export default function ProductDetail() {
                                                 className="btn btn-outline-light w-50 d-flex justify-content-center align-items-center"
                                                 onClick={() => navigate("/products")}
                                             >
-                                                返回商品列表
+                                                回商品列表
                                             </button>
                                             <button
                                                 type="button"
@@ -245,7 +244,7 @@ export default function ProductDetail() {
                                 {/* 副圖區塊 */}
                                 {productImgUrl ? (
                                     <div className="col-md-12 mt-3">
-                                        <p className="ps-3 text-white">更多圖片 (點圖放大):</p>
+                                        <p className="ps-3 d-none d-md-block text-white">更多圖片 (點圖放大):</p>
                                         <div className="row ps-3 pe-3">
                                             {product.imageUrl && (
                                                 <motion.div
