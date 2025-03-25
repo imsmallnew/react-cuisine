@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from 'axios';
 import { pushMessage } from '../redux/toastSlice';
 import { showLoading, hideLoading } from "../redux/loadingSlice";
@@ -15,6 +15,8 @@ export default function Form() {
   const navigate = useNavigate();
   const { cartList } = useSelector((state) => state.cart);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
+  const location = useLocation(); // 取得目前的路由
 
   const {
     register,
@@ -38,11 +40,13 @@ export default function Form() {
 
   const navToMenu = useCallback(() => {
     const timer = setTimeout(() => {
-      navigate("/"); //   未動作, 10秒後導航到首頁
+      if (!hasNavigated) {
+        navigate("/"); // 10 秒後導航到首頁
+      }
     }, 10000);
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, hasNavigated]);
 
   // 結帳表單
   const checkout = async (data) => {
@@ -93,6 +97,11 @@ export default function Form() {
   useEffect(() => {
     dispatch(getCartList());
   }, [dispatch]);
+
+  // 監聽 location.pathname 變化，如果變更則設定 hasNavigated 為 true
+  useEffect(() => {
+    setHasNavigated(true);
+  }, [location.pathname]);
 
   useEffect(() => {
     const isCartEmpty = cartList?.carts?.length === 0;

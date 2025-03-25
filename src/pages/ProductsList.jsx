@@ -113,7 +113,7 @@ export default function ProductsList() {
         ></div>
 
         <div className="row">
-          
+
           {/* 左側固定分類欄 */}
           <div className="d-flex flex-md-column flex-row col-12 col-md-2 d-md-block category-list">
             <ul className="list-group list-group-horizontal-md list-group-flush flex-md-column flex-row w-100 text-center">
