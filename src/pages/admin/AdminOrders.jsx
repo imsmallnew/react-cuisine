@@ -3,11 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
 import { Modal } from 'bootstrap';
-import OrderMenu from '../components/OrderMenu';
-import Pagination from "../components/Pagination";
-import OrderModal from '../components/OrderModal';
-import { pushMessage } from '../redux/toastSlice';
-import { showLoading, hideLoading } from "../redux/loadingSlice";
+import OrderMenu from '../../components/OrderMenu';
+import Pagination from "../../components/Pagination";
+import OrderModal from '../../components/OrderModal';
+import { pushMessage } from '../../redux/toastSlice';
+import { showLoading, hideLoading } from "../../redux/loadingSlice";
 
 export default function AdminOrders() {
   const API_URL = import.meta.env.VITE_BASE_URL;
@@ -46,36 +46,6 @@ export default function AdminOrders() {
       dispatch(hideLoading());
     }
   }, [API_URL, AUTHOR, dispatch]);
-
-  // 檢查登入狀態
-  const checkUserLogin = useCallback(async () => {
-    dispatch(showLoading("讀取中..."));
-    try {
-      await axios.post(`${API_URL}/v2/api/user/check`)
-    } catch (error) {
-      dispatch(pushMessage({
-        title: "系統提示",
-        text: error?.response?.data?.message || `驗證登入失敗`,
-        status: "failed"
-      }))
-      navigate("/login")
-    } finally {
-      dispatch(hideLoading());
-    }
-  }, [API_URL, dispatch, navigate]);
-
-  // 若有Cookie則直接驗證, 若失敗則導回login
-  useEffect(() => {
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
-    );
-    if (token.length > 0) {
-      axios.defaults.headers.common['Authorization'] = token;
-      checkUserLogin()
-    } else {
-      navigate("/login")
-    }
-  }, [checkUserLogin, navigate])
 
   // 當 `page` 變更時，取得資料
   useEffect(() => {

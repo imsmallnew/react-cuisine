@@ -27,7 +27,7 @@ export default function ProductModal({
             <div className="row g-4">
               <div className="col-md-10">
                 <div className='row'>
-                  <div className='col-12 col-md-6'>
+                  <div className='col-md-6'>
                     <div className="mb-3">
                       <label htmlFor="title" className="form-label">
                         商品名稱
@@ -43,7 +43,7 @@ export default function ProductModal({
                       />
                     </div>
                   </div>
-                  <div className='col-12 col-md-6 pb-4'>
+                  <div className='col-md-6 pb-4'>
                     <label className="form-check-label" htmlFor="isEnabled">
                       是否啟用
                     </label>
@@ -60,7 +60,7 @@ export default function ProductModal({
                   </div>
                 </div>
                 <div className='row'>
-                  <div className='col-12 col-md-6'>
+                  <div className='col-md-6'>
                     <div className="mb-3">
                       <label htmlFor="category" className="form-label">
                         分類
@@ -81,7 +81,7 @@ export default function ProductModal({
                       </div>
                     </div>
                   </div>
-                  <div className='col-12 col-md-6'>
+                  <div className='col-md-6'>
                     <div className="mb-3">
                       <label htmlFor="unit" className="form-label">
                         單位
@@ -152,7 +152,7 @@ export default function ProductModal({
                   </div>
                 </div>
                 <div className='row'>
-                  <div className='col-12 col-md-6'>
+                  <div className='col-md-6'>
                     <div className="mb-3">
                       <label htmlFor="description" className="form-label">
                         商品描述
@@ -168,7 +168,7 @@ export default function ProductModal({
                       />
                     </div>
                   </div>
-                  <div className='col-12 col-md-6'>
+                  <div className='col-md-6'>
                     <div className="mb-3">
                       <label htmlFor="content" className="form-label">
                         說明內容

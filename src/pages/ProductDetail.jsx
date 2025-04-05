@@ -153,7 +153,7 @@ export default function ProductDetail() {
         </div>
 
         {/* 產品詳細卡片 */}
-        <div className="col-md-10 col-12">
+        <div className="col-md-10">
           <AnimatePresence mode="wait">
             <motion.div
               className="card shadow-lg p-4"

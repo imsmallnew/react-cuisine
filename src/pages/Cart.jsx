@@ -67,26 +67,6 @@ export default function Cart() {
     }
   });
 
-  // 取得購物車資料
-  // const getCartList = async () => {
-  //   dispatch(showLoading("讀取中..."));
-
-  //   try {
-  //     const res = await axios.get(`${API_URL}/v2/api/${AUTHOR}/cart`)
-  //     let data = res.data?.data;
-  //     setCartList(data)
-  //   } catch (error) {
-  //     console.error(error)
-  //     dispatch(pushMessage({
-  //       title: "系統提示",
-  //       text: error?.response?.data?.message || `取得購物車清單失敗`,
-  //       status: "failed"
-  //     }))
-  //   } finally {
-  //     dispatch(hideLoading());
-  //   }
-  // }
-
   // 更新購物車
   const updateCartItem = async (cartItem, qty) => {
     dispatch(showLoading("更新購物車中..."));
@@ -290,20 +270,20 @@ export default function Cart() {
             <div className="container">
               <div className="row g-2 mt-2 justify-content-end text-center text-md-end">
                 {cartList?.carts?.length !== 0 && (
-                  <div className="col-12 col-md-3">
+                  <div className="col-md-3">
                     <button className="btn btn-outline-danger w-100 px-4 py-2" type="button" onClick={() => openDeleteModal({})}>
                       <span>清空購物車</span>
                     </button>
                   </div>
                 )}
-                <div className="col-12 col-md-3">
+                <div className="col-md-3">
                   <Link className="btn btn-dark btn-hover w-100 px-4 py-2" to={'/products'}>
                     <span>繼續購物</span>
                   </Link>
                 </div>
 
                 {cartList?.carts?.length !== 0 && (
-                  <div className="col-12 col-md-3">
+                  <div className="col-md-3">
                     <Link className="btn btn-dark btn-hover w-100 px-4 py-2" to={'/form'}>
                       <span>結帳表單</span>
                     </Link>

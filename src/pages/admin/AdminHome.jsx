@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import ReactLoading from 'react-loading';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
-import { pushMessage } from '../redux/toastSlice';
-import { showLoading, hideLoading } from "../redux/loadingSlice";
+import { pushMessage } from '../../redux/toastSlice';
+import { showLoading, hideLoading } from "../../redux/loadingSlice";
 
 export default function AdminHome() {
   const API_URL = import.meta.env.VITE_BASE_URL;
@@ -20,7 +20,7 @@ export default function AdminHome() {
 
   // 處理訂單數據
   const calculateSales = useCallback((ordersData) => {
-    const productSales = {}; // 存放 { 產品名稱: { totalNum, totalAmount } }
+    const productSales = {}; // { 產品名稱: { totalNum, totalAmount } }
     let totalRevenue = 0; // 訂單總金額
 
     ordersData.forEach(order => {
@@ -86,7 +86,6 @@ export default function AdminHome() {
 
   // 獲取所有頁數的訂單資料
   const fetchAllOrders = useCallback(async () => {
-    // dispatch(showLoading("讀取中..."));
     try {
       const firstResponse = await axios.get(`${API_URL}/v2/api/${AUTHOR}/admin/orders`);
       const { total_pages } = firstResponse.data.pagination;
@@ -118,38 +117,9 @@ export default function AdminHome() {
     }
   }, [API_URL, AUTHOR, calculateOrderStatus, calculateSales, dispatch]);
 
-  // 檢查登入狀態
-  const checkUserLogin = useCallback(async (retry = 0) => {
-    dispatch(showLoading("讀取中..."));
-
-    try {
-      await axios.post(`${API_URL}/v2/api/user/check`)
-      fetchAllOrders();
-    } catch (error) {
-      if (retry < 3) {
-        setTimeout(() => checkUserLogin(retry + 1), 500); // 500ms 後重試最多 3 次
-      } else {
-        alert(error?.response?.data?.message);
-        navigate("/login");
-      }
-    }
-  }, [API_URL, fetchAllOrders, dispatch, navigate]);
-
-  // 若有Cookie則直接驗證, 若失敗則導回login
   useEffect(() => {
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
-    );
-
-    if (token.length > 0) {
-      axios.defaults.headers.common['Authorization'] = token;
-      // 確保 token 設置後才執行檢查
-      setTimeout(() => checkUserLogin(), 300); 
-    } else {
-      dispatch(hideLoading())
-      navigate("/login")
-    }
-  }, [checkUserLogin, dispatch, navigate]);
+    fetchAllOrders()
+  }, [])
 
   return (
     <>

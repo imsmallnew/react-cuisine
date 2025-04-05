@@ -1,16 +1,22 @@
-import { Outlet, NavLink, useLocation, Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
-import { useState } from 'react';
+import { Outlet, NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import LogoutBtn from '../components/LogoutBtn';
 import Toast from '../components/Toast';
 import Loading from '../components/Loading';
 import ScrollToTop from '../components/ScrollToTop';
 import logo from '../assets/logo.png';
+import { showLoading, hideLoading } from "../redux/loadingSlice";
 
 export default function AdminLayout() {
+  const API_URL = import.meta.env.VITE_BASE_URL;
   const { isLoading, loadingText } = useSelector((state) => state.loading);
-  const location = useLocation(); // 獲取當前網址
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const isProductPage = location.pathname.startsWith("/admin/products/"); // 判斷是否在商品管理頁面
   const isOrderPage = location.pathname.startsWith("/admin/orders/"); // 判斷是否在訂單管理頁面
   const navList = [
@@ -19,6 +25,45 @@ export default function AdminLayout() {
     { path: "/admin/orders/1", name: "訂單管理", navName: 'orders' },
     { path: "/", name: "返回前台", navName: 'front' },
   ];
+
+  const checkUserLogin = useCallback(async (retry = 0) => {
+    dispatch(showLoading("讀取中..."));
+    try {
+      await axios.post(`${API_URL}/v2/api/user/check`);
+      setIsAuthenticated(true);
+    } catch (error) {
+      if (retry < 3) {
+        setTimeout(() => checkUserLogin(retry + 1), 500);
+      } else {
+        setIsAuthenticated(false);
+        navigate("/login");
+      }
+    } finally {
+      dispatch(hideLoading());
+    }
+  }, [API_URL, dispatch, navigate]);
+
+  useEffect(() => {
+    const token = document.cookie.replace(
+      /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
+    );
+
+    if (token.length > 0) {
+      axios.defaults.headers.common['Authorization'] = token;
+      checkUserLogin();
+    } else {
+      setIsAuthenticated(false);
+      navigate("/login");
+    }
+  }, [checkUserLogin, navigate]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [location.pathname]);
+
+  if (isAuthenticated === null) {
+    return <Loading loadingText="登入驗證中..." />;
+  }
 
   return (
     <>

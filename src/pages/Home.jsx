@@ -44,14 +44,8 @@ export default function Home() {
       promoSectionRef.current.scrollIntoView({ behavior: "smooth" });
     } else if (target === "portfolio" && portfolioSectionRef.current) {
       portfolioSectionRef.current.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-
-  useEffect(() => {
-    scrollTo(); // 網頁載入時滾動到頂部
-  }, []);
 
   // Portfolio 資料
   const portfolioItems = [
@@ -338,7 +332,7 @@ export default function Home() {
               {event.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="col-md-4 col-12 mb-4"
+                  className="col-md-4 mb-4"
                   initial={{ y: -100, opacity: 0 }}
                   whileInView={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
@@ -396,7 +390,7 @@ export default function Home() {
               }}
             >
               {/* 左側 - 地圖 */}
-              <div className="col-12 col-md-8 mb-4 mb-md-0 mb-3">
+              <div className="col-md-8 mb-4 mb-md-0 mb-3">
                 <div className="map-container rounded overflow-hidden">
                   <iframe
                     title="餐廳位置"
@@ -413,15 +407,21 @@ export default function Home() {
               </div>
 
               {/* 右側 - 餐廳資訊 */}
-              <div className="col-12 col-md-4">
+              <div className="col-md-4">
                 <div className="info-box p-4 text-dark rounded text-center text-md-start mx-auto px-0" style={{ maxWidth: "350px" }}>
                   <h3 className="logo-type fw-bold text-dark mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
                     <img src={logo} style={{ width: 50, marginRight: '10px' }} alt="Logo" />
                     Daniel&apos;s Burger
                   </h3>
                   <p className="mb-2"><strong>地址: </strong> 台北市北投區大業路136號</p>
-                  <p className="mb-2"><strong>Email: </strong> imsmallnew@gmail.com</p>
-                  <p className="mb-2"><strong>電話: </strong> 02 2898 1999</p>
+                  <p className="mb-2">
+                    <strong>Email: </strong>
+                    <a href="mailto:imsmallnew@gmail.com">imsmallnew@gmail.com</a>
+                  </p>
+                  <p className="mb-2">
+                    <strong>電話: </strong>
+                    <a href="tel:0228981999">02 2898 1999</a>
+                  </p>
                 </div>
               </div>
             </div>

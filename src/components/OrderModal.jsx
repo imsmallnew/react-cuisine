@@ -111,10 +111,10 @@ export default function OrderModal({
                         <h6 className="text-white">{cartItem?.product?.title}</h6>
                         <small className="text-dark mt-3">
                           <div className="row">
-                            <div className="col-12 col-md-6">
+                            <div className="col-md-6">
                               數量: {cartItem?.qty}
                             </div>
-                            <div className="col-12 col-md-6 text-end">
+                            <div className="col-md-6 text-end">
                               小計: {cartItem?.total} 元
                             </div>
                           </div>

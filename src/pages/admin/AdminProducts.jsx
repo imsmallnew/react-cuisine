@@ -3,13 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import axios from 'axios';
 import { Modal } from 'bootstrap';
-import ProductMenu from "../components/ProductMenu";
-import ProductContent from "../components/ProductContent"
-import Pagination from "../components/Pagination";
-import ProductModal from '../components/ProductModal';
-import DeleteModal from '../components/DeleteModal';
-import { pushMessage } from '../redux/toastSlice';
-import { showLoading, hideLoading } from "../redux/loadingSlice";
+import ProductMenu from "../../components/ProductMenu";
+import ProductContent from "../../components/ProductContent"
+import Pagination from "../../components/Pagination";
+import ProductModal from '../../components/ProductModal';
+import DeleteModal from '../../components/DeleteModal';
+import { pushMessage } from '../../redux/toastSlice';
+import { showLoading, hideLoading } from "../../redux/loadingSlice";
 
 export default function AdminProducts() {
   const API_URL = import.meta.env.VITE_BASE_URL;
@@ -87,37 +87,6 @@ export default function AdminProducts() {
       dispatch(hideLoading());
     }
   }, [API_URL, AUTHOR, dispatch, getAllProducts]);
-
-  // 檢查登入狀態
-  const checkUserLogin = useCallback(async () => {
-    dispatch(showLoading("讀取中..."));
-
-    try {
-      await axios.post(`${API_URL}/v2/api/user/check`)
-    } catch (error) {
-      dispatch(pushMessage({
-        title: "系統提示",
-        text: error?.response?.data?.message || `驗證登入失敗`,
-        status: "failed"
-      }))
-      navigate("/login")
-    } finally {
-      dispatch(hideLoading());
-    }
-  }, [API_URL, dispatch, navigate]);
-
-  // 若有Cookie則直接驗證, 若失敗則導回login
-  useEffect(() => {
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)reactHWToken\s*=\s*([^;]*).*$)|^.*$/, "$1",
-    );
-    if (token.length > 0) {
-      axios.defaults.headers.common['Authorization'] = token;
-      checkUserLogin()
-    } else {
-      navigate("/login")
-    }
-  }, [checkUserLogin, navigate])
 
   // 當 `page` 變更時，取得資料
   useEffect(() => {
@@ -458,7 +427,7 @@ export default function AdminProducts() {
                 handlePageChange={handlePageChange}
               />
             </div>
-            <div className="col-md-3 mt-4 mb-5">
+            <div className="col-md-3 mt-4 mb-5 d-none d-md-block">
               <ProductContent
                 tempProduct={tempProduct}
                 tempImgUrl={tempImgUrl}

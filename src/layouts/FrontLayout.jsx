@@ -12,13 +12,7 @@ export default function FrontLayout() {
   const { cartList } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [menuOpen, setMenuOpen] = useState(false);
-  const location = useLocation(); // 取得當前路由
-
-  // 透過cartSlice取得購物車資料
-  useEffect(() => {
-    dispatch(getCartList());
-  }, [dispatch]);
-
+  const location = useLocation();
   const navList = [
     { path: "/", name: "首頁", navName: 'home' },
     { path: "/products", name: "商品列表", navName: 'products' },
@@ -26,6 +20,15 @@ export default function FrontLayout() {
     { path: "/form", name: "結帳表單", navName: 'form' },
     { path: "login", name: "後台管理", navName: 'admin' },
   ];
+
+  // 透過cartSlice取得購物車資料
+  useEffect(() => {
+    dispatch(getCartList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   return (
     <>
