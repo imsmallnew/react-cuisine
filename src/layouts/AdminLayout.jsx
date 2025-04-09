@@ -32,6 +32,7 @@ export default function AdminLayout() {
       await axios.post(`${API_URL}/v2/api/user/check`);
       setIsAuthenticated(true);
     } catch (error) {
+      console.error(error)
       if (retry < 3) {
         setTimeout(() => checkUserLogin(retry + 1), 500);
       } else {

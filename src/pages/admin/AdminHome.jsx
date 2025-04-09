@@ -1,16 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import ReactLoading from 'react-loading';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { pushMessage } from '../../redux/toastSlice';
-import { showLoading, hideLoading } from "../../redux/loadingSlice";
+import { hideLoading } from "../../redux/loadingSlice";
 
 export default function AdminHome() {
   const API_URL = import.meta.env.VITE_BASE_URL;
   const AUTHOR = import.meta.env.VITE_API_PATH;
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [calculate, setCalculate] = useState(true);
   const [topSalesByQuantity, setTopSalesByQuantity] = useState([]);
@@ -119,7 +117,7 @@ export default function AdminHome() {
 
   useEffect(() => {
     fetchAllOrders()
-  }, [])
+  }, [fetchAllOrders])
 
   return (
     <>
